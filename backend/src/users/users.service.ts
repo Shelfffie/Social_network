@@ -1,14 +1,7 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { User } from 'src/schemas/User.schema';
-import * as bcrypt from 'bcrypt';
-import { LoginDto } from '../auth/dtos/Login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument } from 'src/utils/schema.types';
 
@@ -45,6 +38,10 @@ export class UsersService {
   }
 
   async deleteUser(id: string, user: UserDocument) {
+    const userObj = await this.userModel.findById(id);
+    if (!userObj) throw new HttpException('User not found', 404);
+    if (userObj._id.toString() !== user._id.toString())
+      throw new HttpException('Forbidden', 403);
     return await this.userModel.findByIdAndDelete(id);
   }
 }

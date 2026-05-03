@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PostDocument, UserDocument } from 'src/utils/schema.types';
@@ -6,14 +6,10 @@ import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { getPagination } from 'src/utils/get-pagination';
 import { Post } from 'src/schemas/Post.schema';
-import { User } from 'src/schemas/User.schema';
 
 @Injectable()
 export class PostService {
-  constructor(
-    @InjectModel(Post.name) private postModel: Model<PostDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
   async createPost(createPostDto: CreatePostDto, user: UserDocument) {
     const newPost = new this.postModel({ ...createPostDto, ownerId: user._id });

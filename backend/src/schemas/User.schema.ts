@@ -48,15 +48,6 @@ export class User {
 
   @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
   friendsRequestfromUsers?: Types.ObjectId[];
-
-  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Post' }] })
-  posts?: Types.ObjectId[];
-
-  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Post' }] })
-  likes?: Types.ObjectId[];
-
-  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Comments' }] })
-  comments?: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -34,6 +34,7 @@ export class PostController {
     return this.postService.createPost(createPostDto, user);
   }
 
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   async updatePost(
     @Param('id') id: string,
@@ -46,6 +47,7 @@ export class PostController {
     if (!updatedPost) throw new HttpException('Post not found', 404);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('/:id')
   async deletePost(@Param('id') id: string, @CurrentUser() user: UserDocument) {
     const isValid = mongoose.Types.ObjectId.isValid(id);
@@ -71,6 +73,7 @@ export class PostController {
     return this.postService.getPostsAndFilter(page, search);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/likes')
   async getPostsByLikes(
     @CurrentUser() user: UserDocument,
@@ -79,6 +82,7 @@ export class PostController {
     return this.postService.getPostsByLikes(Number(page), user);
   }
 
+  @UseGuards(AuthGuard)
   @Post('/:id/like')
   async likeUnlikePost(
     @Param('id') id: string,
