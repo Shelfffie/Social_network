@@ -1,8 +1,9 @@
-import { Prop, Schema } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
 @Schema()
 export class User {
+  [x: string]: any;
   @Prop({
     unique: true,
     required: true,
@@ -13,9 +14,17 @@ export class User {
   username: string;
 
   @Prop({
+    trim: true,
+    minLength: 2,
+    maxLength: 50,
+  })
+  displayName?: string;
+
+  @Prop({
     unique: true,
     required: true,
     lowercase: true,
+    trim: true,
     match: /^[\w.]+@[a-z]+\.[a-z]{2,5}$/,
   })
   email: string;
@@ -28,24 +37,26 @@ export class User {
   })
   password: string;
 
-  @Prop()
-  icon?: string;
+  @Prop({ required: false })
+  iconURL?: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-  friends: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
+  friends?: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-  friendsRequest: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
+  friendsRequest?: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
-  friendsRequestfromUsers: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
+  friendsRequestfromUsers?: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }] })
-  posts: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Post' }] })
+  posts?: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }] })
-  likes: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Post' }] })
+  likes?: Types.ObjectId[];
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comments' }] })
-  comments: Types.ObjectId[];
+  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'Comments' }] })
+  comments?: Types.ObjectId[];
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
