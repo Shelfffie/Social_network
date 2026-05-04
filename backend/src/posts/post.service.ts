@@ -12,8 +12,11 @@ export class PostService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
   async createPost(createPostDto: CreatePostDto, user: UserDocument) {
-    const newPost = new this.postModel({ ...createPostDto, ownerId: user._id });
-    return newPost.save();
+    const newPost = new this.postModel({
+      ...createPostDto,
+      creatorId: user._id,
+    });
+    return await newPost.save();
   }
 
   async updatePost(
@@ -23,7 +26,7 @@ export class PostService {
   ) {
     const post = await this.postModel.findById(id);
     if (!post) throw new HttpException('Post not found', 404);
-    if (post.ownerId.toString() !== user._id.toString())
+    if (post.creatorId.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
 
     return await this.postModel.findByIdAndUpdate(id, updatePostDto, {
@@ -34,7 +37,7 @@ export class PostService {
   async deletePost(id: string, user: UserDocument) {
     const post = await this.postModel.findById(id);
     if (!post) throw new HttpException('Post not found', 404);
-    if (post.ownerId.toString() !== user._id.toString())
+    if (post.creatorId.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
     return await this.postModel.findByIdAndDelete(id);
   }
@@ -53,11 +56,7 @@ export class PostService {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate({ path: 'ownerId', select: 'name' })
-      .populate({
-        path: 'comments',
-        populate: { path: 'creatorId', select: 'name' },
-      });
+      .populate({ path: 'creatorId', select: 'username' });
 
     return { posts, count };
   }
@@ -72,7 +71,7 @@ export class PostService {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate({ path: 'ownerId', select: 'name' });
+      .populate({ path: 'creatorId', select: 'name' });
 
     return { posts, count };
   }

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Post {
   @Prop({ required: true, trim: true, minlength: 3, maxlength: 10000 })
   content: string;
@@ -10,14 +10,11 @@ export class Post {
   images?: [{ type: String }];
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  ownerId: Types.ObjectId;
+  creatorId: Types.ObjectId;
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
   likes: Types.ObjectId[];
-
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comments' }] })
-  comments: Types.ObjectId[];
 }
 export const PostSchema = SchemaFactory.createForClass(Post);
 
-PostSchema.index({ content: 'text', likes: -1 });
+PostSchema.index({ content: 'text', likes: -1, createdAt: -1 });

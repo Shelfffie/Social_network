@@ -88,6 +88,8 @@ export class PostController {
     @Param('id') id: string,
     @CurrentUser() user: UserDocument,
   ) {
+    const isValid = mongoose.Types.ObjectId.isValid(id);
+    if (!isValid) throw new HttpException('Inalid ID', 400);
     return this.postService.likeUnlike(id, user);
   }
 }
