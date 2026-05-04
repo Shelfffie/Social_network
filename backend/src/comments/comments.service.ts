@@ -46,6 +46,7 @@ export class CommentsService {
       ...createCommentDto,
       creatorId: user._id,
       postId: postId,
+      parentId: createCommentDto.parentId ?? null,
     });
 
     return await newComment.save();
