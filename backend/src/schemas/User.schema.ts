@@ -3,7 +3,6 @@ import { Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class User {
-  [x: string]: any;
   @Prop({
     unique: true,
     required: true,
@@ -42,12 +41,6 @@ export class User {
 
   @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
   friends?: Types.ObjectId[];
-
-  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
-  friendsRequest?: Types.ObjectId[];
-
-  @Prop({ required: false, type: [{ type: Types.ObjectId, ref: 'User' }] })
-  friendsRequestfromUsers?: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
