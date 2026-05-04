@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Body,
-  Res,
   Patch,
   Param,
   HttpException,
@@ -10,6 +9,8 @@ import {
   Get,
   Query,
   UseGuards,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
@@ -77,9 +78,9 @@ export class PostController {
   @Get('/likes')
   async getPostsByLikes(
     @CurrentUser() user: UserDocument,
-    @Query() page: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    return this.postService.getPostsByLikes(Number(page), user);
+    return this.postService.getPostsByLikes(page, user);
   }
 
   @UseGuards(AuthGuard)

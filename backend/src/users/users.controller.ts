@@ -1,6 +1,5 @@
 import {
   Controller,
-  Post,
   Body,
   UseGuards,
   Get,
@@ -15,7 +14,6 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import type { UserDocument } from 'src/utils/schema.types';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
-import mongoose from 'mongoose';
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -33,8 +31,6 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
     const updatedUser = await this.usersService.updateUser(
       id,
       updateUserDto,
@@ -46,8 +42,6 @@ export class UserController {
 
   @Delete('/:id')
   deleteUser(@CurrentUser() user: UserDocument, @Param('id') id: string) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
     return this.usersService.deleteUser(id, user);
   }
 }

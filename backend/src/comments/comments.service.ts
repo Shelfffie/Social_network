@@ -18,7 +18,7 @@ export class CommentsService {
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
   ) {}
 
-  async getPosts(postId: string, page: number) {
+  async getComments(postId: string, page: number) {
     const post = await this.postModel.findById(postId);
     if (!post) throw new HttpException("Post doesn't exist", 404);
 
@@ -37,8 +37,8 @@ export class CommentsService {
 
   async createComment(
     postId: string,
-    user: UserDocument,
     createCommentDto: CreateCommentDto,
+    user: UserDocument,
   ) {
     const post = await this.postModel.findById(postId);
     if (!post) throw new HttpException("Post doesn't exist", 404);
