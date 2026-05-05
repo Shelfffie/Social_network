@@ -6,15 +6,16 @@ export class Post {
   @Prop({ required: true, trim: true, minlength: 3, maxlength: 10000 })
   content: string;
 
-  @Prop({ required: false })
-  images?: [{ type: String }];
+  @Prop([String])
+  images?: string[];
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
   creatorId: Types.ObjectId;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], index: true })
   likes: Types.ObjectId[];
 }
 export const PostSchema = SchemaFactory.createForClass(Post);
 
-PostSchema.index({ content: 'text', likes: -1, createdAt: -1 });
+PostSchema.index({ content: 'text' });
+PostSchema.index({ createdAt: -1 });

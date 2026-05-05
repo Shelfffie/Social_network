@@ -43,20 +43,23 @@ export class PostService {
   }
 
   async getPostById(id: string) {
-    return await this.postModel.findById(id);
+    return await this.postModel.findById(id).exec();
   }
 
   async getPostsAndFilter(page: number, search: string) {
     const { skip, limit } = getPagination(page, 10);
 
     const filter = search ? { $text: { $search: search } } : {};
-    const count = await this.postModel.countDocuments(filter);
-    const posts = await this.postModel
-      .find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .populate({ path: 'creatorId', select: 'username' });
+    const [posts, count] = await Promise.all([
+      this.postModel
+        .find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('creatorId', 'username')
+        .exec(),
+      this.postModel.countDocuments(filter).exec(),
+    ]);
 
     return { posts, count };
   }
@@ -64,14 +67,17 @@ export class PostService {
   async getPostsByLikes(page: number, user: UserDocument) {
     const { skip, limit } = getPagination(page, 10);
     const filter = { likes: user._id };
-    const count = await this.postModel.countDocuments(filter);
 
-    const posts = await this.postModel
-      .find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .populate({ path: 'creatorId', select: 'name' });
+    const [posts, count] = await Promise.all([
+      this.postModel
+        .find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate('creatorId', 'name')
+        .exec(),
+      this.postModel.countDocuments(filter).exec(),
+    ]);
 
     return { posts, count };
   }

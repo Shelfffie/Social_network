@@ -9,16 +9,17 @@ import { UserDocument } from 'src/utils/schema.types';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async findOne(username: string): Promise<User | null> {
+  async findOne(username: string): Promise<UserDocument | null> {
     const findUser = await this.userModel
       .findOne({ username })
-      .select('+password');
+      .select('+password')
+      .exec();
     if (!findUser) return null;
     return findUser;
   }
 
-  async findById(id: string): Promise<User | null> {
-    const findUser = await this.userModel.findById(id);
+  async findById(id: string): Promise<UserDocument | null> {
+    const findUser = await this.userModel.findById(id).exec();
     if (!findUser) return null;
     return findUser;
   }
@@ -28,7 +29,7 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     user: UserDocument,
   ) {
-    const userObj = await this.userModel.findById(id);
+    const userObj = await this.userModel.findById(id).exec();
     if (!userObj) throw new HttpException('User not found', 404);
     if (userObj._id.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
@@ -38,7 +39,7 @@ export class UsersService {
   }
 
   async deleteUser(id: string, user: UserDocument) {
-    const userObj = await this.userModel.findById(id);
+    const userObj = await this.userModel.findById(id).exec();
     if (!userObj) throw new HttpException('User not found', 404);
     if (userObj._id.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);

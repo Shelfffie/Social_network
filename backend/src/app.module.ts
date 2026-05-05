@@ -4,6 +4,8 @@ import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { ConfigModule } from '@nestjs/config';
+import { FriendsController } from './friends/friend-requests.controller';
+import { FriendsModule } from './friends/friend-requests.module';
 
 @Module({
   imports: [
@@ -14,8 +16,9 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    FriendsModule,
   ],
-  controllers: [],
+  controllers: [FriendsController],
   providers: [],
 })
 export class AppModule {}

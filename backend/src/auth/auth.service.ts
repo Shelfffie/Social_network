@@ -38,7 +38,9 @@ export class AuthService {
   }
 
   async signIn(loginDto: LoginDto) {
-    const user = await this.usersService.findOne(loginDto.username);
+    const user: UserDocument | null = await this.usersService.findOne(
+      loginDto.username,
+    );
 
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 

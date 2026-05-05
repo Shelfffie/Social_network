@@ -10,8 +10,10 @@ export class Friends {
   from: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  to: Types.ObjectId[];
+  to: Types.ObjectId;
 
   @Prop({ enum: ['pending', 'accepted', 'rejected'], default: 'pending' })
   status: string;
 }
+
+export const FriendsSchema = SchemaFactory.createForClass(Friends);
