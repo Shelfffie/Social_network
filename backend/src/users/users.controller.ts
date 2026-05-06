@@ -14,6 +14,7 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import type { UserDocument } from 'src/utils/schema.types';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
+import mongoose from 'mongoose';
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -44,5 +45,12 @@ export class UserController {
   deleteUser(@CurrentUser() user: UserDocument, @Param('id') id: string) {
     if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
     return this.usersService.deleteUser(id, user);
+  }
+
+  @Delete('/:friendId')
+  deleteFriend(@CurrentUser() user, @Param('friendId') friendId: string) {
+    const isValid = mongoose.Types.ObjectId.isValid(friendId);
+    if (!isValid) throw new HttpException('Inalid ID', 400);
+    return this.deleteFriend(friendId, user._id.toString());
   }
 }
