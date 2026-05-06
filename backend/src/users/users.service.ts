@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { ClientSession, Model } from 'mongoose';
 import { User } from 'src/schemas/User.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument } from 'src/utils/schema.types';
@@ -44,5 +44,21 @@ export class UsersService {
     if (userObj._id.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
     return await this.userModel.findByIdAndDelete(id);
+  }
+
+  async addFriend(
+    friendUserId: mongoose.Types.ObjectId,
+    meId: string,
+    session?: ClientSession,
+  ) {
+    return await this.userModel
+      .findByIdAndUpdate(
+        meId,
+        {
+          $addToSet: { friends: friendUserId },
+        },
+        { new: true, session },
+      )
+      .exec();
   }
 }

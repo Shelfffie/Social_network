@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 export class Friends {
   @Prop({
     required: false,
-    type: [{ type: Types.ObjectId, ref: 'User', required: true }],
+    type: { type: Types.ObjectId, ref: 'User', required: true },
   })
   from: Types.ObjectId;
 
