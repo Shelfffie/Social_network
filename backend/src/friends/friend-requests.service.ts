@@ -95,16 +95,18 @@ export class FriendsService {
       await this.friendsModel
         .findByIdAndDelete(friendship._id)
         .session(session);
-      const target = await this.usersService.findById(targetId);
-      const user = await this.usersService.findById(userId);
-      if (!target || !user) {
-        await this.friendsModel.deleteOne({ _id: friendship._id });
-        throw new HttpException('User not found.', 404);
-      }
-      target.friends?.filter((friend) => friend.toString() !== userId);
-      user.friends?.filter((friend) => friend.toString() !== targetId);
-      (await target.save()).$session(session);
-      (await user.save()).$session(session);
+      await Promise.all([
+        this.usersService.removeFriend(
+          new mongoose.Types.ObjectId(targetId),
+          userId,
+          session,
+        ),
+        this.usersService.removeFriend(
+          new mongoose.Types.ObjectId(userId),
+          targetId,
+          session,
+        ),
+      ]);
       await session.commitTransaction();
       return { message: 'Friend is deleted' };
     } catch (error) {
