@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Connection, Model } from 'mongoose';
-import { Friends } from 'src/schemas/Friends.schema';
+import mongoose, { ClientSession, Connection, Model } from 'mongoose';
+import { Friends } from 'src/schemas/Friends-requests.schema';
 import { FriendsDocument } from 'src/utils/schema.types';
 import { FriendsFilterType } from './utils/types';
 import { UsersService } from 'src/users/users.service';
@@ -15,14 +15,21 @@ export class FriendsService {
     private usersService: UsersService,
   ) {}
 
-  async getFriendshipStatus(targetId: string, userId: string) {
+  async getFriendship(
+    targetId: string,
+    userId: string,
+    session?: ClientSession,
+  ) {
     return await this.friendsModel
-      .findOne({
-        $or: [
-          { from: userId, to: targetId },
-          { from: targetId, to: userId },
-        ],
-      })
+      .findOne(
+        {
+          $or: [
+            { from: userId, to: targetId },
+            { from: targetId, to: userId },
+          ],
+        },
+        { session },
+      )
       .exec();
   }
 
@@ -33,12 +40,14 @@ export class FriendsService {
   async sendRequest(targetId: string, userId: string) {
     const target = await this.usersService.findById(targetId);
     if (!target) throw new HttpException('User not found', 404);
-    const friendship = this.getFriendshipStatus(targetId, userId);
-    if (!friendship)
-      throw new HttpException('Request or friendship already exist', 409);
+    const isFriends = target.friends?.includes(
+      new mongoose.Types.ObjectId(userId),
+    );
+    if (isFriends) throw new HttpException('Friendship already exist', 409);
+    const pendingRequest = await this.getFriendship(targetId, userId);
+    if (pendingRequest) throw new HttpException('Request already exist', 409);
 
-    const newRequest = new this.friendsModel({ from: userId, to: targetId });
-    return await newRequest.save();
+    return await new this.friendsModel({ from: userId, to: targetId }).save();
   }
 
   async acceptFriendship(requestId: string, userId: string) {
@@ -55,16 +64,13 @@ export class FriendsService {
           'You are not authorized to accept this request',
           403,
         );
-      if (request.status === 'accepted')
-        throw new HttpException('Users are already friends', 409);
       const sender = await this.usersService.findById(request.from.toString());
       if (!sender) {
         await this.friendsModel.deleteOne({ _id: requestId });
         throw new HttpException('User no longer exist.', 404);
       }
 
-      request.status = 'accepted';
-      await request.save({ session });
+      await this.friendsModel.deleteOne({ _id: request._id });
 
       await Promise.all([
         this.usersService.addFriend(sender._id, userId, session),
@@ -89,44 +95,11 @@ export class FriendsService {
     const request = await this.friendsModel.findOne({
       from: targetId,
       to: userId,
-      status: 'pending',
     });
     if (!request)
       throw new HttpException('Pending request friendship not found.', 404);
 
     await this.friendsModel.deleteOne({ _id: request._id });
     return { message: 'Friendship request declined successfully' };
-  }
-
-  async deleteFriend(targetId: string, userId: string) {
-    const session = await this.connection.startSession();
-    session.startTransaction();
-    try {
-      const friendship = await this.getFriendshipStatus(targetId, userId);
-      if (!friendship)
-        throw new HttpException('This friendship does not exist', 404);
-      await this.friendsModel
-        .findByIdAndDelete(friendship._id)
-        .session(session);
-      await Promise.all([
-        this.usersService.removeFriend(
-          new mongoose.Types.ObjectId(targetId),
-          userId,
-          session,
-        ),
-        this.usersService.removeFriend(
-          new mongoose.Types.ObjectId(userId),
-          targetId,
-          session,
-        ),
-      ]);
-      await session.commitTransaction();
-      return { message: 'Friend is deleted' };
-    } catch (error) {
-      await session.abortTransaction();
-      throw error;
-    } finally {
-      session.endSession();
-    }
   }
 }

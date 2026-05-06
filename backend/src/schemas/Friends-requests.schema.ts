@@ -11,9 +11,6 @@ export class Friends {
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   to: Types.ObjectId;
-
-  @Prop({ enum: ['pending', 'accepted'], default: 'pending' })
-  status: string;
 }
 
 export const FriendsSchema = SchemaFactory.createForClass(Friends);
