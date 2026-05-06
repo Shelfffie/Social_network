@@ -31,17 +31,18 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
     const updatedUser = await this.usersService.updateUser(
       id,
       updateUserDto,
       user,
     );
-    if (!updatedUser) throw new HttpException('User not found', 404);
     return updatedUser;
   }
 
   @Delete('/:id')
   deleteUser(@CurrentUser() user: UserDocument, @Param('id') id: string) {
+    if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
     return this.usersService.deleteUser(id, user);
   }
 }

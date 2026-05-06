@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import mongoose, { ClientSession, Connection, Model } from 'mongoose';
+import { ClientSession, Connection, Model } from 'mongoose';
 import { User } from 'src/schemas/User.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument } from 'src/utils/schema.types';
@@ -13,18 +13,14 @@ export class UsersService {
   ) {}
 
   async findOne(username: string): Promise<UserDocument | null> {
-    const findUser = await this.userModel
+    return await this.userModel
       .findOne({ username })
       .select('+password')
       .exec();
-    if (!findUser) return null;
-    return findUser;
   }
 
   async findById(id: string): Promise<UserDocument | null> {
-    const findUser = await this.userModel.findById(id).exec();
-    if (!findUser) return null;
-    return findUser;
+    return await this.userModel.findById(id).exec();
   }
 
   async updateUser(
@@ -32,28 +28,19 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     user: UserDocument,
   ) {
-    const userObj = await this.userModel.findById(id).exec();
-    if (!userObj) throw new HttpException('User not found', 404);
-    if (userObj._id.toString() !== user._id.toString())
-      throw new HttpException('Forbidden', 403);
-    return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
-      new: true,
-    });
+    const updatedUser = await this.userModel
+      .findOneAndUpdate({ _id: id }, updateUserDto, { new: true })
+      .exec();
+    if (!updatedUser) throw new HttpException('User not found', 404);
   }
 
   async deleteUser(id: string, user: UserDocument) {
-    const userObj = await this.userModel.findById(id).exec();
-    if (!userObj) throw new HttpException('User not found', 404);
-    if (userObj._id.toString() !== user._id.toString())
-      throw new HttpException('Forbidden', 403);
-    return await this.userModel.findByIdAndDelete(id);
+    const deleted = await this.userModel.findByIdAndDelete(id).exec();
+    if (!deleted) throw new HttpException('User not found', 404);
+    return deleted;
   }
 
-  async addFriend(
-    friendUserId: mongoose.Types.ObjectId,
-    meId: string,
-    session?: ClientSession,
-  ) {
+  async addFriend(friendUserId: string, meId: string, session?: ClientSession) {
     return await this.userModel
       .findByIdAndUpdate(
         meId,
@@ -66,7 +53,7 @@ export class UsersService {
   }
 
   async removeFriend(
-    friendUserId: mongoose.Types.ObjectId,
+    friendUserId: string,
     meId: string,
     session?: ClientSession,
   ) {
@@ -81,23 +68,16 @@ export class UsersService {
 
   async deleteFriend(targetId: string, userId: string) {
     const friend = await this.findById(targetId);
-    if (!friend) throw new HttpException('User not found', 404);
-    if (!friend.friends?.some((id) => id.toString() === userId))
+    const user = await this.findById(userId);
+    if (!friend || !user) throw new HttpException('User not found', 404);
+    if (!user.friends?.some((id) => id.toString() === targetId))
       throw new HttpException('This user is not your friend', 404);
     const session = await this.connection.startSession();
     session.startTransaction();
     try {
       await Promise.all([
-        this.removeFriend(
-          new mongoose.Types.ObjectId(targetId),
-          userId,
-          session,
-        ),
-        this.removeFriend(
-          new mongoose.Types.ObjectId(userId),
-          targetId,
-          session,
-        ),
+        this.removeFriend(targetId, userId, session),
+        this.removeFriend(userId, targetId, session),
       ]);
       await session.commitTransaction();
       return { message: 'Friend is deleted' };

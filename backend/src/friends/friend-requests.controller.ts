@@ -61,12 +61,15 @@ export class FriendsController {
   }
 
   @Delete(':/targetId')
-  declineFriendchip(
+  declineOrCancelFriendchip(
     @Param('targetId') targetId: string,
     @CurrentUser() user: UserDocument,
   ) {
     const isValid = mongoose.Types.ObjectId.isValid(targetId);
     if (!isValid) throw new HttpException('Inalid ID', 400);
-    return this.friendsService.declineFriendship(targetId, user._id.toString());
+    return this.friendsService.declineOrCancelFriendchip(
+      targetId,
+      user._id.toString(),
+    );
   }
 }

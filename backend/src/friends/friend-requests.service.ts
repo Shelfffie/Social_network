@@ -74,12 +74,8 @@ export class FriendsService {
       await this.friendsModel.deleteOne({ _id: request._id }).session(session);
 
       await Promise.all([
-        this.usersService.addFriend(sender._id, userId, session),
-        this.usersService.addFriend(
-          new mongoose.Types.ObjectId(userId),
-          sender._id.toString(),
-          session,
-        ),
+        this.usersService.addFriend(sender._id.toString(), userId, session),
+        this.usersService.addFriend(userId, sender._id.toString(), session),
       ]);
 
       await session.commitTransaction();
@@ -92,7 +88,7 @@ export class FriendsService {
     }
   }
 
-  async declineFriendship(targetId: string, userId: string) {
+  async declineOrCancelFriendchip(targetId: string, userId: string) {
     const request = await this.getFriendship(targetId, userId);
     if (!request)
       throw new HttpException('Pending request friendship not found.', 404);
