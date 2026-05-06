@@ -61,4 +61,18 @@ export class UsersService {
       )
       .exec();
   }
+
+  async removeFriend(
+    friendUserId: mongoose.Types.ObjectId,
+    meId: string,
+    session?: ClientSession,
+  ) {
+    return await this.userModel
+      .findByIdAndUpdate(
+        meId,
+        { $pull: { friends: friendUserId } },
+        { new: true, session },
+      )
+      .exec();
+  }
 }

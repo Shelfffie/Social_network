@@ -16,7 +16,7 @@ export class FriendsService {
   ) {}
 
   async getFriendshipStatus(targetId: string, userId: string) {
-    const friendship = await this.friendsModel
+    return await this.friendsModel
       .findOne({
         $or: [
           { from: userId, to: targetId },
@@ -24,8 +24,6 @@ export class FriendsService {
         ],
       })
       .exec();
-    if (!friendship) return { status: 'none' };
-    return friendship;
   }
 
   async getRequests(query: FriendsFilterType) {
@@ -36,7 +34,7 @@ export class FriendsService {
     const target = await this.usersService.findById(targetId);
     if (!target) throw new HttpException('User not found', 404);
     const friendship = this.getFriendshipStatus(targetId, userId);
-    if ((await friendship).status !== 'none')
+    if (!friendship)
       throw new HttpException('Request or friendship already exist', 409);
 
     const newRequest = new this.friendsModel({ from: userId, to: targetId });
@@ -58,7 +56,7 @@ export class FriendsService {
           403,
         );
       if (request.status === 'accepted')
-        throw new HttpException('Users are already friends', 403);
+        throw new HttpException('Users are already friends', 409);
       const sender = await this.usersService.findById(request.from.toString());
       if (!sender) {
         await this.friendsModel.deleteOne({ _id: requestId });
@@ -69,10 +67,11 @@ export class FriendsService {
       await request.save({ session });
 
       await Promise.all([
-        this.usersService.addFriend(sender._id, userId),
+        this.usersService.addFriend(sender._id, userId, session),
         this.usersService.addFriend(
           new mongoose.Types.ObjectId(userId),
           sender._id.toString(),
+          session,
         ),
       ]);
 
@@ -83,6 +82,36 @@ export class FriendsService {
       throw error;
     } finally {
       await session.endSession();
+    }
+  }
+
+  async deleteFriend(targetId: string, userId: string) {
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    try {
+      const friendship = await this.getFriendshipStatus(targetId, userId);
+      if (!friendship)
+        throw new HttpException('This friendship does not exist', 404);
+      await this.friendsModel
+        .findByIdAndDelete(friendship._id)
+        .session(session);
+      const target = await this.usersService.findById(targetId);
+      const user = await this.usersService.findById(userId);
+      if (!target || !user) {
+        await this.friendsModel.deleteOne({ _id: friendship._id });
+        throw new HttpException('User not found.', 404);
+      }
+      target.friends?.filter((friend) => friend.toString() !== userId);
+      user.friends?.filter((friend) => friend.toString() !== targetId);
+      (await target.save()).$session(session);
+      (await user.save()).$session(session);
+      await session.commitTransaction();
+      return { message: 'Friend is deleted' };
+    } catch (error) {
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
     }
   }
 }
