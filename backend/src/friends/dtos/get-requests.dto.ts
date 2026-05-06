@@ -2,7 +2,6 @@ import { IsEnum, IsNotEmpty } from 'class-validator';
 
 export enum RequestsStatus {
   PENDING = 'pending',
-  REJECTED = 'rejected',
 }
 
 export enum RequestsType {

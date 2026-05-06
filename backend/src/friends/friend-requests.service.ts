@@ -85,6 +85,19 @@ export class FriendsService {
     }
   }
 
+  async declineFriendship(targetId: string, userId: string) {
+    const request = await this.friendsModel.findOne({
+      from: targetId,
+      to: userId,
+      status: 'pending',
+    });
+    if (!request)
+      throw new HttpException('Pending request friendship not found.', 404);
+
+    await this.friendsModel.deleteOne({ _id: request._id });
+    return { message: 'Friendship request declined successfully' };
+  }
+
   async deleteFriend(targetId: string, userId: string) {
     const session = await this.connection.startSession();
     session.startTransaction();
