@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpException,
   Param,
@@ -15,11 +16,11 @@ import { FriendsService } from './friend-requests.service';
 import { FriendsFilterType } from './utils/types';
 import mongoose from 'mongoose';
 
+@UseGuards(AuthGuard)
 @Controller('reuests')
 export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
-  @UseGuards(AuthGuard)
   @Get('')
   getRequestsByUser(
     @CurrentUser() user: UserDocument,
@@ -37,7 +38,6 @@ export class FriendsController {
     return this.friendsService.getRequests(filter);
   }
 
-  @UseGuards(AuthGuard)
   @Post('/:targetId')
   sendFriendRequest(
     @Param('targetId') targetId: string,
@@ -48,5 +48,25 @@ export class FriendsController {
     if (targetId === user._id.toString())
       throw new HttpException('You cannot send a request to yourself', 400);
     return this.friendsService.sendRequest(targetId, user._id.toString());
+  }
+
+  @Post('/:requestId')
+  acceptRequestId(
+    @Param('requestId') requestId: string,
+    @CurrentUser() user: UserDocument,
+  ) {
+    const isValid = mongoose.Types.ObjectId.isValid(requestId);
+    if (!isValid) throw new HttpException('Inalid ID', 400);
+    return this.friendsService.acceptFriendship(requestId, user._id.toString());
+  }
+
+  @Delete(':/targetId')
+  declineFriendchip(
+    @Param('targetId') targetId: string,
+    @CurrentUser() user: UserDocument,
+  ) {
+    const isValid = mongoose.Types.ObjectId.isValid(targetId);
+    if (!isValid) throw new HttpException('Inalid ID', 400);
+    return this.friendsService.declineFriendship(targetId, user._id.toString());
   }
 }

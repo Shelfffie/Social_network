@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 
 @Schema()
-export class Friends {
+export class FriendRequests {
   @Prop({
     required: false,
     type: { type: Types.ObjectId, ref: 'User', required: true },
@@ -13,4 +13,4 @@ export class Friends {
   to: Types.ObjectId;
 }
 
-export const FriendsSchema = SchemaFactory.createForClass(Friends);
+export const FriendsSchema = SchemaFactory.createForClass(FriendRequests);
