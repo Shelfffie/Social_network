@@ -4,9 +4,9 @@ import { User, UserSchema } from 'src/schemas/User.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from '../config/auth/constans';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { UsersModule } from 'src/users/users.module';
+import { jwtConstants } from 'src/config/auth/constans';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [

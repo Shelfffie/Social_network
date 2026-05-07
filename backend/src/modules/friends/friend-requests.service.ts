@@ -4,8 +4,8 @@ import mongoose, { ClientSession, Connection, Model } from 'mongoose';
 import { FriendRequests } from 'src/schemas/Friends-requests.schema';
 import { FriendsDocument } from 'src/utils/schema.types';
 import { FriendsFilterType } from './utils/types';
-import { UsersService } from 'src/users/users.service';
 import { InjectConnection } from '@nestjs/mongoose';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class FriendsService {

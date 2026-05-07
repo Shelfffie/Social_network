@@ -57,7 +57,7 @@ export class FriendsController {
     return this.friendsService.acceptFriendship(requestId, user._id.toString());
   }
 
-  @Delete(':/targetId')
+  @Delete('/:targetId')
   declineOrCancelFriendchip(
     @Param('targetId', IsValidMongooseIdPipe) targetId: string,
     @CurrentUser() user: UserDocument,
