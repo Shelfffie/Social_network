@@ -18,9 +18,10 @@ import { CreatePostDto } from './dtos/create-post.dto';
 import mongoose from 'mongoose';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { PaginationFilterDto } from './dtos/pagination-filter.dto';
-import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import type { UserDocument } from 'src/utils/schema.types';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { CurrentUser } from '../users/decorators/current-user.decorator';
+import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pipe';
 
 @Controller('posts')
 export class PostController {
@@ -38,28 +39,25 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Patch('/:id')
   async updatePost(
-    @Param('id') id: string,
+    @Param('id', IsValidMongooseIdPipe) id: string,
     @Body() updateUserDto: UpdatePostDto,
     @CurrentUser() user: UserDocument,
   ) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
-    const updatedPost = this.updatePost(id, updateUserDto, user);
+    const updatedPost = this.postService.updatePost(id, updateUserDto, user);
     if (!updatedPost) throw new HttpException('Post not found', 404);
   }
 
   @UseGuards(AuthGuard)
   @Delete('/:id')
-  async deletePost(@Param('id') id: string, @CurrentUser() user: UserDocument) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
+  async deletePost(
+    @Param('id', IsValidMongooseIdPipe) id: string,
+    @CurrentUser() user: UserDocument,
+  ) {
     return this.postService.deletePost(id, user);
   }
 
   @Get('/:id')
-  async findById(@Param('id') id: string) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
+  async findById(@Param('id', IsValidMongooseIdPipe) id: string) {
     return this.postService.getPostById(id);
   }
 
@@ -86,11 +84,9 @@ export class PostController {
   @UseGuards(AuthGuard)
   @Post('/:id/like')
   async likeUnlikePost(
-    @Param('id') id: string,
+    @Param('id', IsValidMongooseIdPipe) id: string,
     @CurrentUser() user: UserDocument,
   ) {
-    const isValid = mongoose.Types.ObjectId.isValid(id);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
     return this.postService.likeUnlike(id, user);
   }
 }

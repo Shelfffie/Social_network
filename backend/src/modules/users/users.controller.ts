@@ -15,6 +15,7 @@ import type { UserDocument } from 'src/utils/schema.types';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import mongoose from 'mongoose';
+import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pipe';
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -48,9 +49,10 @@ export class UserController {
   }
 
   @Delete('/:friendId')
-  deleteFriend(@CurrentUser() user, @Param('friendId') friendId: string) {
-    const isValid = mongoose.Types.ObjectId.isValid(friendId);
-    if (!isValid) throw new HttpException('Inalid ID', 400);
+  deleteFriend(
+    @CurrentUser() user,
+    @Param('friendId', IsValidMongooseIdPipe) friendId: string,
+  ) {
     return this.deleteFriend(friendId, user._id.toString());
   }
 }
