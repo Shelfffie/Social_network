@@ -13,12 +13,12 @@ import type { UserDocument } from 'src/utils/schema.types';
 import { GetRequestsDto } from './dtos/get-requests.dto';
 import { FriendsService } from './friend-requests.service';
 import { FriendsFilterType } from './utils/types';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pipe';
 
 @UseGuards(AuthGuard)
-@Controller('reuests')
+@Controller('requests')
 export class FriendsController {
   constructor(private friendsService: FriendsService) {}
 
@@ -35,11 +35,10 @@ export class FriendsController {
       filter.from = user._id;
     }
 
-    filter.status = query.status;
     return this.friendsService.getRequests(filter);
   }
 
-  @Post('/:targetId')
+  @Post('/send/:targetId')
   sendFriendRequest(
     @Param('targetId', IsValidMongooseIdPipe) targetId: string,
     @CurrentUser() user: UserDocument,

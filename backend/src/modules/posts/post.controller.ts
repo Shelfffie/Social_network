@@ -37,14 +37,28 @@ export class PostController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('/liked')
+  async getPostsByLikes(
+    @CurrentUser() user: UserDocument,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  ) {
+    return this.postService.getPostsByLikes(page, user);
+  }
+
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   async updatePost(
     @Param('id', IsValidMongooseIdPipe) id: string,
     @Body() updateUserDto: UpdatePostDto,
     @CurrentUser() user: UserDocument,
   ) {
-    const updatedPost = this.postService.updatePost(id, updateUserDto, user);
+    const updatedPost = await this.postService.updatePost(
+      id,
+      updateUserDto,
+      user,
+    );
     if (!updatedPost) throw new HttpException('Post not found', 404);
+    return updatedPost;
   }
 
   @UseGuards(AuthGuard)
@@ -73,16 +87,7 @@ export class PostController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('/likes')
-  async getPostsByLikes(
-    @CurrentUser() user: UserDocument,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  ) {
-    return this.postService.getPostsByLikes(page, user);
-  }
-
-  @UseGuards(AuthGuard)
-  @Post('/:id/like')
+  @Patch('/:id/like')
   async likeUnlikePost(
     @Param('id', IsValidMongooseIdPipe) id: string,
     @CurrentUser() user: UserDocument,

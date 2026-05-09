@@ -30,7 +30,7 @@ export class PostService {
       throw new HttpException('Forbidden', 403);
 
     return await this.postModel.findByIdAndUpdate(id, updatePostDto, {
-      new: true,
+      returnDocument: 'after',
     });
   }
 
@@ -39,11 +39,14 @@ export class PostService {
     if (!post) throw new HttpException('Post not found', 404);
     if (post.creatorId.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
-    return await this.postModel.findByIdAndDelete(id);
+    return await { message: 'Deleted succesfully!' };
   }
 
   async getPostById(id: string) {
-    return await this.postModel.findById(id).exec();
+    return await this.postModel
+      .findById(id)
+      .populate('creatorId', 'username')
+      .exec();
   }
 
   async getPostsAndFilter(page: number, search: string) {

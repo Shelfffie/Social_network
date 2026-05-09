@@ -36,6 +36,7 @@ export class AuthController {
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', { signed: true });
+
     return { message: 'Logout successfull' };
   }
 }

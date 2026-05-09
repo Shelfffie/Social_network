@@ -22,11 +22,18 @@ export class User {
   @Prop({
     unique: true,
     required: true,
-    lowercase: true,
-    trim: true,
-    match: /^[\w.]+@[a-z]+\.[a-z]{2,5}$/,
+    select: false,
   })
-  email: string;
+  emailContent: string;
+
+  @Prop({ required: true, select: false })
+  emailIv: string;
+
+  @Prop({ required: true, select: false })
+  emailTag: string;
+
+  @Prop({ required: true, select: false })
+  blindIndex: string;
 
   @Prop({
     required: true,

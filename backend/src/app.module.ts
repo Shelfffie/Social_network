@@ -8,13 +8,14 @@ import { FriendsModule } from './modules/friends/friend-requests.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot('mongodb://localhost/social-media'),
     UsersModule,
     PostsModule,
     CommentsModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+
     FriendsModule,
   ],
   controllers: [],

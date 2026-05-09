@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { ClientSession, Connection, Model } from 'mongoose';
+import mongoose, { ClientSession, Connection, Model, Types } from 'mongoose';
 import { FriendRequests } from 'src/schemas/Friends-requests.schema';
 import { FriendsDocument } from 'src/utils/schema.types';
 import { FriendsFilterType } from './utils/types';
@@ -21,24 +21,36 @@ export class FriendsService {
     userId: string,
     session?: ClientSession,
   ) {
+    const userObjectId = new Types.ObjectId(userId);
+    const targetObjectId = new Types.ObjectId(targetId);
     return await this.friendsModel
-      .findOne(
-        {
-          $or: [
-            { from: userId, to: targetId },
-            { from: targetId, to: userId },
-          ],
-        },
-        { session },
-      )
+      .findOne({
+        $or: [
+          {
+            from: userObjectId,
+            to: targetObjectId,
+          },
+          {
+            from: targetObjectId,
+            to: userObjectId,
+          },
+        ],
+      })
+      .session(session ?? null)
       .exec();
   }
 
   async getRequests(query: FriendsFilterType) {
+    console.log('Виконується пошук із фільтром:', query);
+
+    const allDocs = await this.friendsModel.find({}).exec();
+    console.log('Усього документів у базі:', allDocs.length);
     return await this.friendsModel.find(query).exec();
   }
 
   async sendRequest(targetId: string, userId: string) {
+    console.log('TARGET ID:', targetId, 'USER ID:', userId);
+
     const target = await this.usersService.findById(targetId);
     if (!target) throw new HttpException('User not found', 404);
     const isFriends = target.friends?.some((id) => id.toString() === userId);
@@ -46,7 +58,13 @@ export class FriendsService {
     const pendingRequest = await this.getFriendship(targetId, userId);
     if (pendingRequest) throw new HttpException('Request already exist', 409);
 
-    return await new this.friendsModel({ from: userId, to: targetId }).save();
+    console.log('ШУКАЄМО: from:', userId, 'to:', targetId);
+    console.log('РЕЗУЛЬТАТ ПОШУКУ:', pendingRequest);
+
+    return await new this.friendsModel({
+      from: new Types.ObjectId(userId),
+      to: new Types.ObjectId(targetId),
+    }).save();
   }
 
   async acceptFriendship(requestId: string, userId: string) {
@@ -89,9 +107,12 @@ export class FriendsService {
   }
 
   async declineOrCancelFriendchip(targetId: string, userId: string) {
+    console.log('target id:', targetId, 'user:', userId);
+
     const request = await this.getFriendship(targetId, userId);
-    if (!request)
-      throw new HttpException('Pending request friendship not found.', 404);
+    console.log(request);
+
+    if (!request) throw new HttpException('Request friendship not found.', 404);
 
     await this.friendsModel.deleteOne({ _id: request._id });
     return { message: 'Friendship request declined successfully' };

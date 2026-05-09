@@ -25,7 +25,7 @@ export class CommentsService {
     const { skip, limit } = getPagination(page, 20);
     const comments = await this.commentModel
       .find({
-        postId: new Types.ObjectId(postId),
+        postId: postId,
       })
       .sort({ createdAt: -1 })
       .skip(skip)

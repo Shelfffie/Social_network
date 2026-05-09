@@ -1,5 +1,6 @@
 import {
   IsEmail,
+  IsLowercase,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -10,11 +11,17 @@ import {
 export class RegisterDto {
   @IsNotEmpty()
   @IsString()
+  @Matches(/^\S+$/, {
+    message: 'Username must be a single word without spaces',
+  })
+  @IsLowercase()
+  @MinLength(3)
   username: string;
 
   @IsEmail()
   @IsNotEmpty()
   @IsString()
+  @IsLowercase()
   email: string;
 
   @IsOptional()

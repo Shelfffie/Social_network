@@ -3,9 +3,7 @@ import { Types } from 'mongoose';
 
 @Schema()
 export class FriendRequests {
-  @Prop({
-    type: { type: Types.ObjectId, ref: 'User', required: true },
-  })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   from: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })

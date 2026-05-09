@@ -12,11 +12,8 @@ export class UsersService {
     @InjectConnection() private readonly connection: Connection,
   ) {}
 
-  async findOne(username: string): Promise<UserDocument | null> {
-    return await this.userModel
-      .findOne({ username })
-      .select('+password')
-      .exec();
+  async findOne(filter: Record<string, string>): Promise<UserDocument | null> {
+    return await this.userModel.findOne(filter).select('+password').exec();
   }
 
   async findById(id: string): Promise<UserDocument | null> {
@@ -29,9 +26,10 @@ export class UsersService {
     user: UserDocument,
   ) {
     const updatedUser = await this.userModel
-      .findOneAndUpdate({ _id: id }, updateUserDto, { new: true })
+      .findOneAndUpdate({ _id: id }, updateUserDto, { returnDocument: 'after' })
       .exec();
     if (!updatedUser) throw new HttpException('User not found', 404);
+    return updatedUser;
   }
 
   async deleteUser(id: string, user: UserDocument) {
@@ -47,7 +45,7 @@ export class UsersService {
         {
           $addToSet: { friends: friendUserId },
         },
-        { new: true, session },
+        { returnDocument: 'after', session },
       )
       .exec();
   }
@@ -61,7 +59,7 @@ export class UsersService {
       .findByIdAndUpdate(
         meId,
         { $pull: { friends: friendUserId } },
-        { new: true, session },
+        { returnDocument: 'after', session },
       )
       .exec();
   }
@@ -87,5 +85,13 @@ export class UsersService {
     } finally {
       await session.endSession();
     }
+  }
+
+  async getFriendList(userId: string) {
+    return this.userModel
+      .findById(userId)
+      .select('friends')
+      .populate({ path: 'friends', select: 'username' })
+      .exec();
   }
 }

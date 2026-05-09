@@ -4,17 +4,24 @@ import {
   IsString,
   Matches,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class LoginDto {
-  @IsNotEmpty()
+  @ValidateIf((o) => !o.email)
+  @IsNotEmpty({ message: 'Email or username is required' })
   @IsString()
-  username: string;
+  @Matches(/^\S+$/, {
+    message: 'Username must be a single word without spaces',
+  })
+  @MinLength(3)
+  username?: string;
 
+  @ValidateIf((o) => !o.name)
   @IsEmail()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Email or username is required' })
   @IsString()
-  email: string;
+  email?: string;
 
   @IsString()
   @MinLength(8)
