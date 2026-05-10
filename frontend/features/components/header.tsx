@@ -1,0 +1,8 @@
+export default function Header() {
+  return (
+    <header className="flex flex-row justify-between items-center px-20  w-full h-20 bg-indigo-200 fixed z-1000  right-0 top-0 border-b-1 border-indigo-600">
+      HEADER
+      <div className="flex items-center h-full ">Sign in</div>
+    </header>
+  );
+}
