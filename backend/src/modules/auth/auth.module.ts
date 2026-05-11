@@ -10,15 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      global: true,
-      useFactory: async (ConfigService: ConfigService) => ({
-        secret: ConfigService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '25h' },
-      }),
-    }),
+    JwtModule.registerAsync({}),
     MongooseModule.forFeature([
       {
         name: User.name,
