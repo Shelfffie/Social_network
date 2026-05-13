@@ -20,6 +20,9 @@ export class Post {
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], index: true })
   likes: Types.ObjectId[];
 
+  @Prop({ default: 0 })
+  commentsCount: number;
+
   @Prop({
     type: [String],
     set: (tags: string[]) => {

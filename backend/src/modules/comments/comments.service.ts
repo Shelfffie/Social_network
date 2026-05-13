@@ -49,6 +49,10 @@ export class CommentsService {
       parentId: createCommentDto.parentId ?? null,
     });
 
+    await this.postModel.findByIdAndUpdate(postId, {
+      $inc: { commentsCount: 1 },
+    });
+
     return await newComment.save();
   }
 
@@ -57,6 +61,9 @@ export class CommentsService {
     if (!comment) throw new HttpException("Comment doesn't exist", 404);
     if (comment.creatorId.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
+    await this.postModel.findByIdAndUpdate(comment.postId, {
+      $inc: { commentsCount: -1 },
+    });
     return await this.commentModel.findByIdAndDelete(commentId);
   }
 }

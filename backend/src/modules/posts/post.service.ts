@@ -59,7 +59,7 @@ export class PostService {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate('creatorId', 'username')
+        .populate('creatorId', 'username', 'iconURL')
         .exec(),
       this.postModel.countDocuments(filter).exec(),
     ]);
