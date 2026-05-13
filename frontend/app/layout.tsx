@@ -16,14 +16,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className="min-h-full flex flex-col">
-        <Header />
+        <header>
+          <Header />
+        </header>
 
-        <SidebarProvider>
-          <AppSidebar />
-        </SidebarProvider>
-        <main className="flex-1 min-h-full">{children}</main>
+        <main className="flex-1 flex-row min-h-full pt-30 pl-36">
+          <SidebarProvider>
+            <AppSidebar /> {children}
+          </SidebarProvider>
+        </main>
 
-        <Footer />
+        <footer>
+          <Footer />
+        </footer>
       </body>
     </html>
   );

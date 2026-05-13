@@ -22,7 +22,7 @@ export function AppSidebar() {
           text="Search"
         />
         <button className="h-11 w-10 bg-white rounded-tr-full rounded-br-full shadow-[4px_4px_10px_-1px_rgba(0,0,0,0.2)] peer-focus-within:ring-indigo-300 peer-focus-within:ring-3">
-          <Search className="m-auto" />
+          <Search className="m-auto hover:text-indigo-600 active:scale-110 transition-all" />
         </button>
       </SidebarHeader>
       <SidebarContent className="bg-indigo-50">
