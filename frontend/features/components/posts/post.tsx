@@ -2,19 +2,7 @@ import { Heart, MessageCircle } from "lucide-react";
 import AvatarIcon from "../avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
 
-export default function PostComponent({
-  post,
-  loading,
-}: {
-  post?: PostType;
-  loading: boolean;
-}) {
-  if (loading) {
-    return (
-      <div className="flex flex-col gap-5 p-5 max-w-1000 border-b-1 h-auto min-h-50 border-indigo-300 pl-5 bg-indigo-50 rounded-md"></div>
-    );
-  }
-
+export default function PostComponent({ post }: { post?: PostType }) {
   return (
     <main className="flex flex-col gap-5 p-5 max-w-1000 border-b-1 h-auto min-h-30 border-indigo-300 pl-5">
       <div className="flex flex-row gap-5">

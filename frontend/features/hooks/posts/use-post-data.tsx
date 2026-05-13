@@ -8,15 +8,14 @@ import { useEffect, useState } from "react";
 export default function usePostsData(query: string) {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [count, setCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setLoading(true);
     const getPosts = async () => {
       try {
-        console.log("in");
         const posts = await fetchPostData();
         console.log(posts);
-
         setPosts(posts.posts);
         setCount(posts.count);
       } catch (error: unknown) {
