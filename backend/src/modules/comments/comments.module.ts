@@ -5,9 +5,11 @@ import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { PostsModule } from '../posts/posts.module';
 import { UsersModule } from '../users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    JwtModule.register({}),
     MongooseModule.forFeature([
       {
         name: Comment.name,

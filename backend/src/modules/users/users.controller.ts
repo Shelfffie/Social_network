@@ -55,6 +55,7 @@ export class UserController {
     const deleted = this.usersService.deleteUser(id, user);
     if (id === user._id.toString())
       res.clearCookie('access_token', { signed: true });
+    res.clearCookie('refresh_token', { signed: true });
     return deleted;
   }
 

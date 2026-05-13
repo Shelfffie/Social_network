@@ -5,21 +5,16 @@ import { User } from 'src/schemas/User.schema';
 import { RegisterDto } from './dtos/Register.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dtos/Login.dto';
-import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/utils/schema.types';
 import { UsersService } from '../users/users.service';
-import * as crypto from 'node:crypto';
-import { ConfigService } from '@nestjs/config';
-import { hashObjType } from './utils/hashObjType';
-import { Response } from 'express';
 import { SecurityService } from './security.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @Inject(forwardRef(() => UsersService))
     private securityService: SecurityService,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
   ) {}
 
@@ -77,11 +72,11 @@ export class AuthService {
       username: user.username,
     };
 
-    const token = await this.securityService.generateToken(
+    const tokens = await this.securityService.generateToken(
       user._id.toString(),
       user.username,
     );
 
-    return { payload, token };
+    return { payload, tokens };
   }
 }

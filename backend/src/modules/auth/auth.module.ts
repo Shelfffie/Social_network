@@ -6,12 +6,19 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { UsersModule } from '../users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SecurityService } from './security.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    JwtModule.registerAsync({}),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_ACCESS_TOKEN'),
+        signOptions: { expiresIn: '15m' },
+      }),
+    }),
     MongooseModule.forFeature([
       {
         name: User.name,
@@ -20,8 +27,8 @@ import { SecurityService } from './security.service';
     ]),
     forwardRef(() => UsersModule),
   ],
-  providers: [AuthService, SecurityService, AuthGuard],
+  providers: [AuthService, SecurityService],
   controllers: [AuthController],
-  exports: [AuthService, SecurityService, AuthGuard],
+  exports: [AuthService, SecurityService, JwtModule],
 })
 export class AuthModule {}

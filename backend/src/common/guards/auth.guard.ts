@@ -6,6 +6,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import mongoose from 'mongoose';
@@ -16,17 +17,22 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private usersService: UsersService,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromCookie(request);
+
+    console.log('Cookies in Guard:', token);
     if (!token) {
       throw new UnauthorizedException();
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN'),
+      });
       const isValid = mongoose.Types.ObjectId.isValid(payload.id);
       if (!isValid) throw new HttpException('Inalid ID', 400);
       const user = await this.usersService.findById(payload.id);
@@ -34,7 +40,8 @@ export class AuthGuard implements CanActivate {
       if (!user) throw new HttpException('User nor found', 404);
 
       request.user = user;
-    } catch {
+    } catch (error) {
+      console.log('JWT Error:', error.message);
       throw new HttpException('Unauthorized', 401);
     }
 

@@ -22,15 +22,9 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { payload, token } = await this.authService.signIn(loginDto);
+    const { payload, tokens } = await this.authService.signIn(loginDto);
 
-    res.cookie('access_token', token, {
-      maxAge: 90000000,
-      httpOnly: true,
-      signed: true,
-      sameSite: 'lax',
-    });
-
+    this.securityService.setCookie(res, tokens.accesToken, tokens.refreshToken);
     return {
       user: payload,
       message: 'Login successfull',
@@ -40,6 +34,7 @@ export class AuthController {
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', { signed: true });
+    res.clearCookie('refresh_token', { signed: true });
 
     return { message: 'Logout successfull' };
   }

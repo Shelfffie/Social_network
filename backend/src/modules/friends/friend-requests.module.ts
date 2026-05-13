@@ -7,9 +7,11 @@ import {
   FriendsSchema,
 } from 'src/schemas/Friends-requests.schema';
 import { UsersModule } from '../users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    JwtModule.register({}),
     MongooseModule.forFeature([
       {
         name: FriendRequests.name,
