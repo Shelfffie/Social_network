@@ -1,4 +1,5 @@
 export type PostType = {
+  _id: string;
   content?: string;
   images?: string[];
   likes?: string[];

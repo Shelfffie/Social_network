@@ -20,15 +20,11 @@ export default function RootLayout({
           <Header />
         </header>
 
-        <main className="flex-1 flex-row min-h-full pt-30 pl-36">
+        <main className="flex-1 flex-row min-h-full pt-15 pl-36">
           <SidebarProvider>
             <AppSidebar /> {children}
           </SidebarProvider>
         </main>
-
-        <footer>
-          <Footer />
-        </footer>
       </body>
     </html>
   );

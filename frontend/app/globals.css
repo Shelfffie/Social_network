@@ -133,3 +133,18 @@ body {
     @apply font-sans;
   }
 }
+
+.button-c {
+  background-color: #eef2ff;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.button-c:hover {
+  background-color: #e0e7ff;
+}
+
+.button-c:active {
+  transform: translateY(2px);
+  transition: all 0.05s ease;
+}
