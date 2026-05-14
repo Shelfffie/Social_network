@@ -1,76 +1,34 @@
-import { createContext, useContext, useState, useEffect } from "react";
+"use client";
 
-/*const AuthContext = createContext();
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+interface AuthContextType {
+  user: any;
+  setUser: Dispatch<SetStateAction<any>>;
+}
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/un/auth-status",
-          {
-            withCredentials: true,
-          }
-        );
-        if (response.data.auth) {
-          setUser(response.data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        setUser(null);
-        setError(error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+const AuthContext = createContext<AuthContextType | null>(null);
 
-    checkAuth();
-  }, []);
-
-  const LogOut = async () => {
-    const ok = await confirm({
-      title: "Вийти з облікового запису?",
-    });
-
-    if (ok) {
-      try {
-        setIsLoggedOut(true);
-        await axios.post(
-          "http://localhost:5000/un/logout",
-          {},
-          { withCredentials: true }
-        );
-        navigate("/");
-        setUser(null);
-      } catch (error) {
-        setError(error.response?.data?.message || error.message);
-      } finally {
-        setIsLoggedOut(false);
-      }
-    }
-  };
+export const AuthProvider = ({
+  children,
+  initialUser,
+}: {
+  children: React.ReactNode;
+  initialUser: any;
+}) => {
+  const [user, setUser] = useState(initialUser);
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        setUser,
-        loading,
-        isLoggedIn: !!user,
-        LogOut,
-        isLoggedOut,
-      }}
-    >
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-*/

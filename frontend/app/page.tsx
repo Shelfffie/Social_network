@@ -11,18 +11,24 @@ export default function Home() {
   const { posts, loading } = usePostsData(query);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row items-center h-40 pt-5 border-1 border-b-indigo-600">
-        <div className="w-25 flex justify-center">
-          <AvatarIcon />
+    <div className="flex flex-col w-full">
+      <main className="flex-1">
+        <div className="flex flex-row items-center h-40 pt-5 border-1 border-b-indigo-600">
+          <div className="w-25 flex justify-center">
+            <AvatarIcon />
+          </div>
+          <CreatePostComponent />
         </div>
-        <CreatePostComponent />
+        {loading ? (
+          <PostsSkeleton />
+        ) : (
+          posts?.map((post) => <PostComponent key={post._id} post={post} />)
+        )}
+      </main>
+
+      <div className="flex justify-center items-center w-full h-15 ">
+        <h3>That's all for now</h3>
       </div>
-      {loading ? (
-        <PostsSkeleton />
-      ) : (
-        posts?.map((post) => <PostComponent key={post._id} post={post} />)
-      )}
     </div>
   );
 }
