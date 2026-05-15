@@ -9,8 +9,8 @@ import {
 } from "react";
 
 interface AuthContextType {
-  user: any;
-  setUser: Dispatch<SetStateAction<any>>;
+  user: UserType;
+  setUser: Dispatch<SetStateAction<UserType>>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -20,7 +20,7 @@ export const AuthProvider = ({
   initialUser,
 }: {
   children: React.ReactNode;
-  initialUser: any;
+  initialUser: UserType;
 }) => {
   const [user, setUser] = useState(initialUser);
 

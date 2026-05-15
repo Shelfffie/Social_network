@@ -5,6 +5,7 @@ import ProfileComponent from "./profile-component";
 import PostList from "../posts/post-list";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import CreatePostComponent from "../posts/create-post-component";
 
 export default function ProfileView({
   user,
@@ -12,7 +13,7 @@ export default function ProfileView({
   loading,
   isMyProfile,
 }: {
-  user: any;
+  user: UserType;
   posts: PostType[];
   loading: boolean;
   isMyProfile: boolean;
@@ -25,8 +26,8 @@ export default function ProfileView({
 
   return (
     <div className="flex flex-col w-full">
-      <ProfileComponent user={user} isMyProfile={true} />
-      <nav className="flex flex-row justify-between items-center h-15 bg-indigo-50 pl-10 pr-10 border-t-1 border-b-1 border-indigo-600">
+      <ProfileComponent user={user} isMyProfile={isMyProfile} />
+      <nav className="flex flex-row justify-between items-center h-15 bg-indigo-50 pl-10 pr-10 border-t-1 border-b-1 border-indigo-300">
         <Button
           variant="ghost"
           onClick={() => setIsActive("posts")}
@@ -57,6 +58,11 @@ export default function ProfileView({
           </>
         )}
       </nav>
+      {isActive === "posts" && (
+        <div className="flex items-center justify-center h-40 pt-5 border-b-1 border-indigo-300">
+          <CreatePostComponent />
+        </div>
+      )}
       <PostList posts={posts} loading={loading} />
     </div>
   );

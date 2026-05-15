@@ -4,7 +4,7 @@ export function InputBasic({
   styles,
   placeholder,
 }: {
-  styles: string;
+  styles?: string;
   placeholder: string;
 }) {
   return (

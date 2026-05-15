@@ -1,5 +1,4 @@
 "use client";
-import { fetchPostData } from "@/features/actions/get-posts";
 import ProfileView from "@/features/components/profiles/profile-view";
 import { useAuth } from "@/features/contexts/auth-context";
 import usePostsData from "@/features/hooks/posts/use-post-data";
@@ -12,7 +11,7 @@ export default function ProfilePage() {
 
   return (
     <ProfileView
-      user={null}
+      user={auth.user}
       posts={posts}
       loading={loading}
       isMyProfile={true}
