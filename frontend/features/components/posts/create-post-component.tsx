@@ -3,9 +3,9 @@ import { InputBasic } from "../input";
 
 export default function CreatePostComponent() {
   return (
-    <div className="flex flex-col gap-5 justify-end w-200 items-center">
+    <div className="flex flex-col w-full gap-5 justify-end w-200 items-center">
       <InputBasic
-        styles="bg-indigo-50 shadow border-indigo-600"
+        styles="bg-indigo-50 shadow border-indigo-600 w-11/12"
         placeholder="Say hello..."
       />
       <div className="flex flex-row justify-between w-180 ">

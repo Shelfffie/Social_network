@@ -28,5 +28,5 @@ export default function usePostsData(query: string, id?: string) {
     getPosts();
   }, [query]);
 
-  return { posts, loading };
+  return { posts, loading, count };
 }
