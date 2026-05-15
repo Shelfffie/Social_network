@@ -82,6 +82,7 @@ export class PostController {
   ) {
     const page = query.page ?? 1;
     const search = query.search ?? '';
+    console.log('Page:', page, 'Search:', search);
 
     return this.postService.getPostsAndFilter(page, search);
   }

@@ -24,6 +24,7 @@ export class UserController {
 
   @Get('/me')
   me(@CurrentUser() user: UserDocument) {
+    console.log(user);
     return user;
   }
 
