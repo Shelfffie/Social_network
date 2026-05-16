@@ -12,7 +12,6 @@ interface AuthContextType {
   user: UserType;
   setUser: Dispatch<SetStateAction<UserType>>;
 }
-
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({
@@ -36,5 +35,7 @@ export const useAuth = () => {
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context;
+
+  const isLoggedIn = !!context.user;
+  return { ...context, isLoggedIn };
 };

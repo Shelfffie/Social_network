@@ -1,6 +1,7 @@
 import { PostType } from "@/features/utils/types/posts/post-type";
 import PostsSkeleton from "./posts-skeleton";
-import PostComponent from "./post";
+import PostComponent from "./post-component";
+import { useAuth } from "@/features/contexts/auth-context";
 
 interface PostListProps {
   posts: PostType[];
@@ -14,6 +15,7 @@ export default function PostList({
   emptyMessage = "That's all for now",
 }: PostListProps) {
   if (loading) return <PostsSkeleton />;
+  const auth = useAuth();
 
   if (!posts || posts.length === 0) {
     return (
@@ -25,7 +27,7 @@ export default function PostList({
   return (
     <div className="flex flex-col">
       {posts?.map((post) => (
-        <PostComponent key={post._id} post={post} />
+        <PostComponent key={post._id} post={post} auth={auth} />
       ))}
     </div>
   );
