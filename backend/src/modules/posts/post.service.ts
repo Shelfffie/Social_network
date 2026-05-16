@@ -45,7 +45,7 @@ export class PostService {
   async getPostById(id: string, user?: UserDocument) {
     const post = await this.postModel
       .findById(id)
-      .populate('creatorId', 'username')
+      .populate('creatorId', 'username iconURL')
       .exec();
 
     if (!post) throw new HttpException('Not found', 404);
