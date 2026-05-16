@@ -8,7 +8,12 @@ export default function ProfileComponent({
   user: UserType;
   isMyProfile: boolean;
 }) {
-  const joinedDate = new Date(user?.createdAt);
+  const createdAt = new Date(user?.createdAt);
+  const joinedAt = createdAt.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <main className="flex flex-row items-center pt-5 h-80 w-full bg-indigo-50">
       <div className="ml-5">
@@ -31,7 +36,7 @@ export default function ProfileComponent({
         )}
       </div>
       <div className="h-full p-5">
-        <p>Joined May 2026</p>
+        <p>Joined {joinedAt}</p>
       </div>
     </main>
   );
