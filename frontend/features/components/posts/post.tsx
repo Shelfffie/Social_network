@@ -1,8 +1,10 @@
 import { Heart, MessageCircle } from "lucide-react";
 import AvatarIcon from "../avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
+import { useState } from "react";
 
 export default function PostComponent({ post }: { post?: PostType }) {
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   return (
     <main className="flex flex-col gap-5 p-5 max-w-1000 border-b-1 h-auto min-h-30 border-indigo-300 pl-5">
       <div className="flex flex-row gap-5">
@@ -30,7 +32,7 @@ export default function PostComponent({ post }: { post?: PostType }) {
         <div className="flex flex-row gap-2">
           <Heart
             className="text-indigo-600 active:scale-110 transition-all"
-            fill="#4F46E5"
+            fill={isLiked ? "#4F46E5" : "none"}
           />
           <p className="text-indigo-600">{post?.likes?.length ?? 0}</p>
         </div>

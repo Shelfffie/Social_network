@@ -49,7 +49,7 @@ export class PostService {
       .exec();
   }
 
-  async getPostsAndFilter(page: number, search: string) {
+  async getPostsAndFilter(page: number, search: string, user?: UserDocument) {
     const { skip, limit } = getPagination(page, 10);
 
     const filter = search ? { $text: { $search: search } } : {};
@@ -64,7 +64,20 @@ export class PostService {
       this.postModel.countDocuments(filter).exec(),
     ]);
 
-    return { posts, count };
+    const mappedPosts = posts.map((post) => {
+      const postObj = post.toObject();
+
+      return {
+        ...postObj,
+        likesCount: postObj.likes?.length || 0,
+        isLiked: user
+          ? postObj.likes?.some((id) => id.toString() === user._id.toString())
+          : false,
+        likes: undefined,
+      };
+    });
+
+    return { posts: mappedPosts, count };
   }
 
   async getPostsByLikes(page: number, user: UserDocument) {

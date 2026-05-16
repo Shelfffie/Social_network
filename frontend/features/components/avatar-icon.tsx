@@ -13,7 +13,7 @@ export default function AvatarIcon({
     <Image
       src={imageSrc}
       alt="avatar"
-      className="rounded-full h-auto w-full min-w-15"
+      className="rounded-full h-auto w-full min-w-15 aspect-square"
       style={{ maxWidth: `${sizes}rem` }}
     />
   );

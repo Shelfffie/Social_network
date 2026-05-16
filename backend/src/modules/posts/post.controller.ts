@@ -79,12 +79,13 @@ export class PostController {
   async getPosts(
     @Query()
     query: PaginationFilterDto,
+    user?: UserDocument,
   ) {
     const page = query.page ?? 1;
     const search = query.search ?? '';
     console.log('Page:', page, 'Search:', search);
 
-    return this.postService.getPostsAndFilter(page, search);
+    return this.postService.getPostsAndFilter(page, search, user);
   }
 
   @UseGuards(AuthGuard)
