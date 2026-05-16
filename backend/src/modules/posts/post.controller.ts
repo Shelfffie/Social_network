@@ -71,8 +71,11 @@ export class PostController {
   }
 
   @Get('/:id')
-  async findById(@Param('id', IsValidMongooseIdPipe) id: string) {
-    return this.postService.getPostById(id);
+  async findById(
+    @Param('id', IsValidMongooseIdPipe) id: string,
+    user?: UserDocument,
+  ) {
+    return this.postService.getPostById(id, user);
   }
 
   @Get('')

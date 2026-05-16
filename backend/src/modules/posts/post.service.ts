@@ -42,11 +42,24 @@ export class PostService {
     return await { message: 'Deleted succesfully!' };
   }
 
-  async getPostById(id: string) {
-    return await this.postModel
+  async getPostById(id: string, user?: UserDocument) {
+    const post = await this.postModel
       .findById(id)
       .populate('creatorId', 'username')
       .exec();
+
+    if (!post) throw new HttpException('Not found', 404);
+
+    const postObj = post.toObject();
+
+    return {
+      ...postObj,
+      likesCount: postObj.likes?.length || 0,
+      isLiked: user
+        ? postObj.likes?.some((id) => id.toString() === user._id.toString())
+        : false,
+      likes: undefined,
+    };
   }
 
   async getPostsAndFilter(page: number, search: string, user?: UserDocument) {
