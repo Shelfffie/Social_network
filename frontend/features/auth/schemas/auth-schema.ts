@@ -24,7 +24,7 @@ export const SignUpSchema = z
     path: ["confirmPassword"],
   });
 
-export const LogInSchema = z.object({
+export const LoginSchema = z.object({
   LoginIndentifier: z
     .string()
     .min(3, "Must be at least 3 characher long")

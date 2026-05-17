@@ -21,6 +21,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     repeatPassword: "",
     showThePassword: false,
   });
+  const [loading, setLoading] = useState<boolean>(false);
 
   const isLogin = mode === "login";
 

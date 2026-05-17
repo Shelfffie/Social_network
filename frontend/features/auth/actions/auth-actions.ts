@@ -2,25 +2,34 @@
 
 import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import { AuthFormInputs } from "./utils/types";
+import { LoginSchema, SignUpSchema } from "../schemas/auth-schema";
+import api from "@/lib/axios";
+import { success } from "zod";
 
 export async function loginActions(data: AuthFormInputs) {
   {
-    //додати валідацію зод
-
+    const parsed = LoginSchema.safeParse(data);
+    if (!parsed.success) return { success: false, error: parsed.error };
     try {
+      const response = await api.post(`/auth/sign-in`, parsed.data);
+      const resData = response.data;
+      console.log(resData);
+      return { success: true, data: resData };
     } catch (error) {
-      catchErrorHandler(error);
+      return { success: false, error: catchErrorHandler(error) };
     }
   }
 }
 
 export async function signupActions(data: AuthFormInputs) {
-  {
-    //додати валідацію зод
-
-    try {
-    } catch (error) {
-      catchErrorHandler(error);
-    }
+  const parsed = SignUpSchema.safeParse(data);
+  if (!parsed.success) return { success: false, error: parsed.error };
+  try {
+    const response = await api.post(`/auth/sign-up`, parsed.data);
+    const resData = response.data;
+    console.log(resData);
+    return { success: true, data: resData };
+  } catch (error) {
+    return { success: false, error: catchErrorHandler(error) };
   }
 }
