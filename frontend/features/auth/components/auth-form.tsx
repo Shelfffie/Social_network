@@ -11,18 +11,7 @@ import {
 import { InputBasic } from "@/features/components/input";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
-
-interface AuthFormProps {
-  mode: "login" | "signup";
-}
-
-interface AuthFormInputs {
-  email: string;
-  username?: string;
-  password: string;
-  repeatPassword?: string;
-  showThePassword: boolean;
-}
+import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
@@ -130,4 +119,4 @@ export default function AuthForm({ mode }: AuthFormProps) {
       )}
     </div>
   );
-} //налаштувати посилання sign up
+}
