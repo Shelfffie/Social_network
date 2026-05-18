@@ -9,7 +9,9 @@ export const catchErrorHandler = (error: unknown) => {
         error.response ? error.response.data : error.message
       )
     );
-    errorMessage = error.response ? error.response.data : error.message;
+    errorMessage = error.response
+      ? error.response.data.message[0]
+      : error.message;
   } else {
     console.log("Unknown error:", error);
     errorMessage = "Unknown error";

@@ -25,7 +25,7 @@ export const SignUpSchema = z
   });
 
 export const LoginSchema = z.object({
-  LoginIndentifier: z
+  loginIdentifier: z
     .string()
     .min(3, "Must be at least 3 characher long")
     .refine(
@@ -36,17 +36,5 @@ export const LoginSchema = z.object({
         message: "Please enter a valid username or email address",
       }
     ),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters long")
-    .max(30, "Password must not exceed 30 characters")
-    .refine((password) => /[A-Z]/.test(password), {
-      message: "Password must contain at least one uppercase letter",
-    })
-    .refine((password) => /[a-z]/.test(password), {
-      message: "Password must contain at least one lowercase letter",
-    })
-    .refine((password) => /[0-9]/.test(password), {
-      message: "Password must contain at least one number",
-    }),
+  password: z.string().min(8, "Password must be at least 8 characters long"),
 });

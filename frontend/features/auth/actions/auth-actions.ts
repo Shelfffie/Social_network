@@ -4,14 +4,26 @@ import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import { AuthFormInputs } from "./utils/types";
 import { LoginSchema, SignUpSchema } from "../schemas/auth-schema";
 import api from "@/lib/axios";
-import { success } from "zod";
+import * as z from "zod";
 
 export async function loginActions(data: AuthFormInputs) {
   {
     const parsed = LoginSchema.safeParse(data);
-    if (!parsed.success) return { success: false, error: parsed.error };
+    console.log("data:", parsed.data);
+
+    if (!parsed.success)
+      return {
+        success: false,
+        error: parsed.error.issues[0]?.message || "Invalid data",
+      };
+
+    const { loginIdentifier, password } = parsed.data;
+    const isEmail = z.email().safeParse(loginIdentifier).success;
+    const payload = isEmail
+      ? { email: loginIdentifier, password }
+      : { username: loginIdentifier.replace(/^@/, ""), password };
     try {
-      const response = await api.post(`/auth/sign-in`, parsed.data);
+      const response = await api.post(`/auth/sign-in`, payload);
       const resData = response.data;
       console.log(resData);
       return { success: true, data: resData };
@@ -23,7 +35,11 @@ export async function loginActions(data: AuthFormInputs) {
 
 export async function signupActions(data: AuthFormInputs) {
   const parsed = SignUpSchema.safeParse(data);
-  if (!parsed.success) return { success: false, error: parsed.error };
+  if (!parsed.success)
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Invalid data",
+    };
   try {
     const response = await api.post(`/auth/sign-up`, parsed.data);
     const resData = response.data;

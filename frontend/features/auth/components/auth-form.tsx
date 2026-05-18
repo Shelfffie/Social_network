@@ -10,18 +10,20 @@ import {
 } from "@/components/ui/field";
 import { InputBasic } from "@/features/components/input";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
+import { loginActions, signupActions } from "../actions/auth-actions";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
     email: "",
     username: "",
     password: "",
-    repeatPassword: "",
+    confirmPassword: "",
     showThePassword: false,
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>("");
 
   const isLogin = mode === "login";
 
@@ -30,9 +32,35 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setInputFieldsValue((prev) => ({ ...prev, [name]: value }));
   };
 
+  const hadnleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    const payload = isLogin
+      ? {
+          loginIdentifier: inputFieldsValue.email || inputFieldsValue.username,
+          password: inputFieldsValue.password,
+        }
+      : inputFieldsValue;
+    const res = isLogin
+      ? await loginActions(payload as any)
+      : await signupActions(payload as any);
+    setLoading(false);
+    if (!res.success) {
+      console.log(res.error);
+      setError(res.error);
+    } else {
+      //temporary
+      console.log("success!!!!!!!");
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center  items-center w-full h-screen">
-      <form className="flex flex-col items-center justify-center gap-5 w-full max-w-sm pt-5 pb-5 rounded-md bg-indigo-50 ">
+      <form
+        className="flex flex-col items-center justify-center gap-5 w-full max-w-sm pt-5 pb-5 rounded-md bg-indigo-50"
+        onSubmit={hadnleSubmit}
+      >
         <h1 className="text-2xl">{isLogin ? "Login" : "Sign up"}</h1>
         <div className="flex flex-col gap-5 w-10/12">
           <div>
@@ -69,10 +97,11 @@ export default function AuthForm({ mode }: AuthFormProps) {
           {!isLogin && (
             <div>
               <p className="ml-5">Repeat password:</p>
+
               <InputBasic
                 placeholder="Enter password"
-                name="repeatPassword"
-                value={inputFieldsValue.repeatPassword}
+                name="confirmPassword"
+                value={inputFieldsValue.confirmPassword}
                 onChange={handleInput}
                 type={!inputFieldsValue.showThePassword ? "password" : "text"}
               />
@@ -99,7 +128,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
             </Field>
           </FieldGroup>
         </div>
-        <Button className="bg-indigo-300 text-black h-10 w-10/12">
+
+        <Button
+          type="submit"
+          className="bg-indigo-300 text-black h-10 w-10/12"
+          disabled={loading}
+        >
           {isLogin ? "Sign in" : "Sign up"}
         </Button>
       </form>

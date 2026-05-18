@@ -6,6 +6,6 @@ export interface AuthFormInputs {
   email: string;
   username?: string;
   password: string;
-  repeatPassword?: string;
+  confirmPassword?: string;
   showThePassword: boolean;
 }
