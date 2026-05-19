@@ -13,6 +13,8 @@ import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
 import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
 import { loginActions, signupActions } from "../actions/auth-actions";
+import { useAuth } from "@/features/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
@@ -24,6 +26,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
+  const { setUser } = useAuth();
+  const router = useRouter();
 
   const isLogin = mode === "login";
 
@@ -52,6 +56,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
     } else {
       //temporary
       console.log("success!!!!!!!");
+      setUser(res.data);
+      router.replace("/");
     }
   };
 

@@ -7,7 +7,6 @@ import { useMemo } from "react";
 
 export default function ProfilePage() {
   const auth = useAuth();
-  const router = useRouter();
   if (!auth.user) {
     return <div>Loading...</div>;
   }

@@ -14,7 +14,6 @@ export default function usePostsData(query: FetchPostsProps) {
     setLoading(true);
     const getPosts = async () => {
       try {
-        if (!query.userId) return;
         console.log("QUERY SEARCH:", query.search);
 
         const posts = await fetchPostData(query);

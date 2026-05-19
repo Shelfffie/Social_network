@@ -37,12 +37,12 @@ export default function LikeButtonToggle({
     <div className="flex flex-row gap-2">
       <Heart
         className={`text-indigo-600 transition-all ${
-          !auth.isLoggedin
+          !auth?.isLoggedIn
             ? "cursor-not-allowed pointer-events-none"
             : "active:scale-110 cursor-pointer"
         }`}
         fill={likes.isLiked ? "#4F46E5" : "none"}
-        onClick={() => handleLikeToggle}
+        onClick={() => handleLikeToggle()}
       />
       <p className="text-indigo-600">{likes.likesCount}</p>
     </div>
