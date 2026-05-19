@@ -19,6 +19,8 @@ export default function LikeButtonToggle({
   post?: PostType;
   auth?: any | null;
 }) {
+  console.log(auth);
+
   const initialIsLiked = useRef(post?.isLiked || false);
   const [likes, setLikes] = useState<postLikesType>({
     likesCount: post?.likesCount ?? 0,

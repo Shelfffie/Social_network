@@ -78,11 +78,12 @@ export class PostController {
     return this.postService.getPostById(id, user);
   }
 
+  @UseGuards(AuthGuard)
   @Get('')
   async getPosts(
     @Query()
     query: PaginationFilterDto,
-    user?: UserDocument,
+    @CurrentUser() user?: UserDocument,
   ) {
     console.log('QUERY:', query);
     console.log('ByUSER', query.byUser);

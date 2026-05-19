@@ -89,6 +89,7 @@ export class PostService {
       this.postModel.countDocuments(filter).exec(),
     ]);
 
+    //поміняти потім на інший метод
     const mappedPosts = posts.map((post) => {
       const postObj = post.toObject();
 
@@ -96,7 +97,9 @@ export class PostService {
         ...postObj,
         likesCount: postObj.likes?.length || 0,
         isLiked: user
-          ? postObj.likes?.some((id) => id.toString() === user._id.toString())
+          ? postObj.likes?.some((id) => {
+              return id.toString() === user._id.toString();
+            })
           : false,
         likes: undefined,
       };

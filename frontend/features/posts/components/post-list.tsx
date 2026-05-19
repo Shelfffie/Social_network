@@ -24,6 +24,8 @@ export default function PostList({
       </div>
     );
   }
+  console.log(posts);
+
   return (
     <div className="flex flex-col">
       {posts?.map((post) => (
