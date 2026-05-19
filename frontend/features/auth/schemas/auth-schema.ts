@@ -2,8 +2,13 @@ import * as z from "zod";
 
 export const SignUpSchema = z
   .object({
-    email: z.email("Invalid email adress"),
-    username: z.string().min(3, "Username must be at least 3 characher long"),
+    email: z.email("Invalid email adress").toLowerCase(),
+
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characher long")
+      .toLowerCase()
+      .transform((val) => val.replace(/^@/, "")),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
@@ -28,13 +33,13 @@ export const LoginSchema = z.object({
   loginIdentifier: z
     .string()
     .min(3, "Must be at least 3 characher long")
-    .refine(
-      (val) => {
-        return val.includes("@") ? z.email("Invalid email adress") : true;
-      },
-      {
-        message: "Please enter a valid username or email address",
-      }
-    ),
+    .toLowerCase()
+    .pipe(
+      z.union([
+        z.email("Email is required"),
+        z.string().min(3, "Username must be at least 3 characters long"),
+      ])
+    )
+    .transform((val) => val.toLowerCase()),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });

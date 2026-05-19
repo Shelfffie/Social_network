@@ -24,7 +24,11 @@ export class AuthController {
   ) {
     const { payload, tokens } = await this.authService.signIn(loginDto);
 
-    this.securityService.setCookie(res, tokens.accesToken, tokens.refreshToken);
+    this.securityService.setCookie(
+      res,
+      tokens.accessToken,
+      tokens.refreshToken,
+    );
     return {
       user: payload,
       message: 'Login successfull',
@@ -46,7 +50,11 @@ export class AuthController {
   ) {
     const oldRefreshToken = req.cookies['refresh_token'];
     const tokens = await this.securityService.refresh(oldRefreshToken);
-    this.securityService.setCookie(res, tokens.accesToken, tokens.refreshToken);
+    this.securityService.setCookie(
+      res,
+      tokens.accessToken,
+      tokens.refreshToken,
+    );
     return { message: 'Refreshed' };
   }
 }

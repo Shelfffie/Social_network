@@ -33,7 +33,7 @@ export class SecurityService {
   async generateToken(id: string, username: string) {
     const payload = { id: id, username: username };
 
-    const [accesToken, refreshToken] = await Promise.all([
+    const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_ACCESS_TOKEN'),
         expiresIn: '15m',
@@ -44,7 +44,7 @@ export class SecurityService {
       }),
     ]);
 
-    return { accesToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
   async encryptValue(value: string): Promise<hashObjType> {
@@ -86,14 +86,12 @@ export class SecurityService {
     res.cookie('access_token', accessToken, {
       maxAge: 15 * 60 * 1000,
       httpOnly: true,
-      signed: true,
       sameSite: 'lax',
     });
 
     res.cookie('refresh_token', refreshToken, {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      signed: true,
       sameSite: 'lax',
     });
   }

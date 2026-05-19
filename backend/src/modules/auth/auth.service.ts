@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   async signUp(registerDto: RegisterDto) {
-    const { password, email, username, ...rest } = registerDto;
+    const { password, email, username, displayName, ...rest } = registerDto;
     console.log(registerDto);
 
     const blindIndex = await this.securityService.generateBlindIndex(email);
@@ -36,6 +36,7 @@ export class AuthService {
     const newUser = new this.userModel({
       ...rest,
       username: username,
+      displayName: displayName ?? username,
       password: hashedPassword,
       emailContent: ecnryptedEmail.content,
       emailIv: ecnryptedEmail.iv,

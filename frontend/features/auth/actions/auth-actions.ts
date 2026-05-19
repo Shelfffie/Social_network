@@ -22,7 +22,7 @@ export async function loginActions(data: AuthFormInputs) {
     const isEmail = z.email().safeParse(loginIdentifier).success;
     const payload = isEmail
       ? { email: loginIdentifier, password }
-      : { username: loginIdentifier.replace(/^@/, ""), password };
+      : { username: loginIdentifier, password };
     try {
       const response = await api.post(`/auth/sign-in`, payload);
       const resData = response.data;
