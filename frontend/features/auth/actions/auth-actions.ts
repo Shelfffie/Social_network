@@ -5,6 +5,7 @@ import { AuthFormInputs } from "./utils/types";
 import { LoginSchema, SignUpSchema } from "../schemas/auth-schema";
 import api from "@/lib/axios";
 import * as z from "zod";
+import { cookies } from "next/headers";
 
 export async function loginActions(data: AuthFormInputs) {
   {
@@ -25,6 +26,17 @@ export async function loginActions(data: AuthFormInputs) {
     try {
       const response = await api.post(`/auth/sign-in`, payload);
       const resData = response.data;
+
+      const rawCookies = response.headers["set-cookie"];
+
+      if (rawCookies) {
+        const cookieStore = await cookies();
+        rawCookies.forEach((cookieStr) => {
+          const [nameValue] = cookieStr.split(";");
+          const [name, value] = nameValue.split("=");
+          cookieStore.set(name.trim(), value.trim(), { httpOnly: true });
+        });
+      }
       console.log(resData);
       return { success: true, data: resData };
     } catch (error) {
