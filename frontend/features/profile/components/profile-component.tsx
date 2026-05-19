@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import AvatarIcon from "../../common/components/avatar-icon";
+import { UserType } from "@/features/utils/types/user";
 
 export default function ProfileComponent({
   user,
@@ -22,7 +23,7 @@ export default function ProfileComponent({
       <div className="flex flex-col flex-1 gap-10 w-70 p-10">
         <div>
           <h2 className="text-xl">{user?.displayName ?? "Showed Name"}</h2>
-          <p className="text-indigo-600">{user?.username ?? "@Username"}</p>
+          <p className="text-indigo-600">@{user?.username ?? "Username"}</p>
         </div>
         <p>{user?.friends.length ?? "0"} friends</p>
         {isMyProfile ? (

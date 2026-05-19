@@ -12,8 +12,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { UserType } from "@/features/utils/types/user";
 
-export function AppSidebar() {
+export function AppSidebar({ user }: { user: UserType }) {
   return (
     <Sidebar className="flex w-100 border-b-1 border-indigo-300">
       <SidebarHeader className="flex flex-row gap-0 bg-indigo-50 items-center justify-center h-50 pt-20 border-b-1 border-indigo-300">
@@ -27,12 +28,12 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="bg-indigo-50">
         <SidebarGroup className="flex flex-row gap-5 p-5 border-b-1 border-indigo-300">
-          <AvatarIcon />
+          <AvatarIcon img={user?.iconUrl} />
           <div>
             <Button variant="link" className="text-xl p-0">
               <Link href={"/profile"}> Profile</Link>
             </Button>
-            <p>@username</p>
+            <p>@{user?.username}</p>
           </div>
         </SidebarGroup>
         <SidebarMenu className="flex flex-col justify-end gap-5 pt-5">

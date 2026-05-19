@@ -1,5 +1,6 @@
 "use client";
 
+import { UserType } from "@/features/utils/types/user";
 import {
   createContext,
   Dispatch,

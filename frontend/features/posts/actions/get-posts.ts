@@ -16,11 +16,10 @@ export async function fetchPostData({
 }: FetchPostsProps) {
   const cookieStore = await cookies();
   const allCookies = cookieStore.toString();
+  //ПРИБРАТИ У МАЙБУТНЬОМУ
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
   try {
-    console.log("SEARCH:", search);
-
     const response = await api.get("/posts", {
       headers: {
         Cookie: allCookies,
