@@ -8,13 +8,13 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { InputBasic } from "@/features/components/input";
+import { InputBasic } from "@/features/common/components/input";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
 import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
 import { loginActions, signupActions } from "../actions/auth-actions";
-import { useAuth } from "@/features/contexts/auth-context";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../contexts/auth-context";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
@@ -25,6 +25,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     showThePassword: false,
   });
   const [loading, setLoading] = useState<boolean>(false);
+  //use later
   const [error, setError] = useState<string | undefined>("");
   const { setUser } = useAuth();
   const router = useRouter();

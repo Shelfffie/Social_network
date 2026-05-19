@@ -1,5 +1,5 @@
 import { Image } from "lucide-react";
-import { InputBasic } from "../input";
+import { InputBasic } from "../../common/components/input";
 
 export default function CreatePostComponent() {
   return (

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import AvatarIcon from "../avatar-icon";
+import AvatarIcon from "../../common/components/avatar-icon";
 
 export default function ProfileComponent({
   user,

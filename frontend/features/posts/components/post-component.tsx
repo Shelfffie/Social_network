@@ -1,5 +1,5 @@
 import { MessageCircle } from "lucide-react";
-import AvatarIcon from "../avatar-icon";
+import AvatarIcon from "../../common/components/avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import LikeButtonToggle from "./like-button-toggle";
 

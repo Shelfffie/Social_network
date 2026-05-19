@@ -2,7 +2,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getMe } from "@/features/auth/actions/get-me";
-import { AuthProvider } from "@/features/contexts/auth-context";
+import { AuthProvider } from "@/features/auth/contexts/auth-context";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 

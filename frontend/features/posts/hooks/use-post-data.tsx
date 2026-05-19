@@ -1,6 +1,9 @@
 "use client";
 
-import { fetchPostData, FetchPostsProps } from "@/features/actions/get-posts";
+import {
+  fetchPostData,
+  FetchPostsProps,
+} from "@/features/posts/actions/get-posts";
 import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import { useEffect, useState } from "react";

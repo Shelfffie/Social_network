@@ -1,18 +1,17 @@
+import { InputBasic } from "../input";
+import { Search } from "lucide-react";
+import AvatarIcon from "../avatar-icon";
+import { Button } from "@/components/ui/button";
+import ButtonGhostMenu from "../button";
+import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { InputBasic } from "../input";
-import { Search } from "lucide-react";
-import AvatarIcon from "../avatar-icon";
-import { Button } from "@/components/ui/button";
-import ButtonGhostMenu from "./button";
-import Link from "next/link";
 
 export function AppSidebar() {
   return (

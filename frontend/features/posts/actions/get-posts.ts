@@ -1,7 +1,7 @@
 "use server";
 import api from "@/lib/axios";
 import { cookies } from "next/headers";
-import { catchErrorHandler } from "../utils/types/catch-error-handler";
+import { catchErrorHandler } from "../../utils/types/catch-error-handler";
 
 export interface FetchPostsProps {
   page?: number;

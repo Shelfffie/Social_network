@@ -1,11 +1,12 @@
-import Header from "@/features/components/header";
+import Header from "@/features/common/components/header";
 import "../globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/features/components/authorized-menu-components/sidebar";
+
 import { getMe } from "@/features/auth/actions/get-me";
-import { AuthProvider } from "@/features/contexts/auth-context";
+import { AuthProvider } from "@/features/auth/contexts/auth-context";
+import { AppSidebar } from "@/features/common/components/authorized-menu-components/sidebar";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 

@@ -1,9 +1,9 @@
 "use client";
-import ProfileView from "@/features/components/profiles/profile-view";
-import { useAuth } from "@/features/contexts/auth-context";
-import usePostsData from "@/features/hooks/posts/use-post-data";
+import ProfileView from "@/features/profile/components/profile-view";
+import usePostsData from "@/features/posts/hooks/use-post-data";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { useAuth } from "@/features/auth/contexts/auth-context";
 
 export default function ProfilePage() {
   const auth = useAuth();

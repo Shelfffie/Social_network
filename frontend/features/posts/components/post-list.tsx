@@ -1,7 +1,7 @@
 import { PostType } from "@/features/utils/types/posts/post-type";
 import PostsSkeleton from "./posts-skeleton";
 import PostComponent from "./post-component";
-import { useAuth } from "@/features/contexts/auth-context";
+import { useAuth } from "@/features/auth/contexts/auth-context";
 
 interface PostListProps {
   posts: PostType[];

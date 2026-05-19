@@ -1,4 +1,4 @@
-import defaultPhoto from "../../public/default-avatar.jpg";
+import defaultPhoto from "../../../public/default-avatar.jpg";
 import Image from "next/image";
 
 export default function AvatarIcon({
