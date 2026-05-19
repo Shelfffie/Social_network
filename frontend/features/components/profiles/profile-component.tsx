@@ -24,7 +24,7 @@ export default function ProfileComponent({
           <h2 className="text-xl">{user?.displayName ?? "Showed Name"}</h2>
           <p className="text-indigo-600">{user?.username ?? "@Username"}</p>
         </div>
-        <p>{user?.friends.length ?? "friends"}</p>
+        <p>{user?.friends.length ?? "0"} friends</p>
         {isMyProfile ? (
           <Button className="bg-white border-1 border-indigo-600 w-30 text-black hover:bg-indigo-300 transition-all">
             Set up profile

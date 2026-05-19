@@ -12,6 +12,7 @@ import { Search } from "lucide-react";
 import AvatarIcon from "../avatar-icon";
 import { Button } from "@/components/ui/button";
 import ButtonGhostMenu from "./button";
+import Link from "next/link";
 
 export function AppSidebar() {
   return (
@@ -30,7 +31,7 @@ export function AppSidebar() {
           <AvatarIcon />
           <div>
             <Button variant="link" className="text-xl p-0">
-              Profile
+              <Link href={"/profile"}> Profile</Link>
             </Button>
             <p>@username</p>
           </div>

@@ -13,3 +13,19 @@ export type PostType = {
     iconURL?: string;
   };
 };
+
+export interface FetchPostsProps {
+  page: number;
+  search?: string;
+  userId?: string;
+}
+
+//zod .
+
+/*const FilterSchema = z.object({
+  page: z.coerce.number().default(1), // Zod сам поставить 1, якщо значення відсутнє
+  search: z.string().optional(),
+  userId: z.string().optional(),
+});
+
+type FetchPostsProps = z.infer<typeof FilterSchema>;*/

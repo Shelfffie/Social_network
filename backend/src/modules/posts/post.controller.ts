@@ -86,9 +86,10 @@ export class PostController {
   ) {
     const page = query.page ?? 1;
     const search = query.search ?? '';
+    const byUser = query.byUser ?? '';
     console.log('Page:', page, 'Search:', search);
 
-    return this.postService.getPostsAndFilter(page, search, user);
+    return this.postService.getPostsAndFilter(page, search, user, byUser);
   }
 
   @UseGuards(AuthGuard)

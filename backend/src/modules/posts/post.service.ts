@@ -62,10 +62,22 @@ export class PostService {
     };
   }
 
-  async getPostsAndFilter(page: number, search: string, user?: UserDocument) {
+  async getPostsAndFilter(
+    page: number,
+    search: string,
+    user?: UserDocument,
+    byUser?: string,
+  ) {
     const { skip, limit } = getPagination(page, 10);
+    const filter: any = {};
 
-    const filter = search ? { $text: { $search: search } } : {};
+    if (search) {
+      filter.$text = { $search: search };
+    }
+    if (byUser) {
+      filter.creatorId = byUser;
+    }
+
     const [posts, count] = await Promise.all([
       this.postModel
         .find(filter)

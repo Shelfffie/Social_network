@@ -22,7 +22,7 @@ export default async function RootLayout({
           <Header />
         </header>
 
-        <main className="flex-1 flex-row min-h-full w-full pt-15 pl-36 overflow-x-hidden">
+        <main className="flex-1 flex-row min-screen w-full pt-15 pl-36 overflow-x-hidden">
           <SidebarProvider>
             <AppSidebar />
             <AuthProvider initialUser={user}>{children}</AuthProvider>

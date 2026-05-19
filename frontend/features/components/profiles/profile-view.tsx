@@ -12,13 +12,13 @@ export default function ProfileView({
   posts,
   loading,
   isMyProfile,
+  auth,
 }: {
   posts: PostType[];
   loading: boolean;
   isMyProfile: boolean;
+  auth?: any; //temporary any
 }) {
-  //ТУТ ТІЛЬКИ АВТОРИЗОВАНИЙ ЮЗЕР ДЛЯ ТЕСТУ! НАДАЛІ ЗМІНИТИ І ПЕРЕДАВАТИ ЧЕРЕЗ ПРОПС
-  const auth = useAuth();
   const [isActive, setIsActive] = useState<string>("posts");
   const basicBtnStyles =
     "relative text-xl transtion-all duration-300 ease-in-out hover:text-indigo-600 hover:-translate-y-1 after:absolute after:w-0 after:h-0 after:left-1/2  after:bottom-0 after:rounded-full after:transtion-all after:duration-300 after:ease-in-out after:-translate-x-1/2";

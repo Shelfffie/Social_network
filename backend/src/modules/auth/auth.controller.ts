@@ -37,8 +37,8 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token', { signed: true });
-    res.clearCookie('refresh_token', { signed: true });
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
 
     return { message: 'Logout successfull' };
   }
@@ -49,6 +49,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const oldRefreshToken = req.cookies['refresh_token'];
+    res.clearCookie('refresh_token');
     const tokens = await this.securityService.refresh(oldRefreshToken);
     this.securityService.setCookie(
       res,
