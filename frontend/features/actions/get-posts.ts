@@ -19,6 +19,8 @@ export async function fetchPostData({
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
   try {
+    console.log("SEARCH:", search);
+
     const response = await api.get("/posts", {
       headers: {
         Cookie: allCookies,

@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { PostDocument, UserDocument } from 'src/utils/schema.types';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
@@ -75,7 +75,7 @@ export class PostService {
       filter.$text = { $search: search };
     }
     if (byUser) {
-      filter.creatorId = byUser;
+      filter.creatorId = new Types.ObjectId(byUser);
     }
 
     const [posts, count] = await Promise.all([

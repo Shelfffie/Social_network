@@ -1,12 +1,13 @@
 "use client";
 
+import { FetchPostsProps } from "@/features/actions/get-posts";
 import AvatarIcon from "@/features/components/avatar-icon";
 import CreatePostComponent from "@/features/components/posts/create-post-component";
 import PostList from "@/features/components/posts/post-list";
 import usePostsData from "@/features/hooks/posts/use-post-data";
 
 export default function Home() {
-  const query = "";
+  const query: FetchPostsProps = {};
   const { posts, loading } = usePostsData(query);
 
   return (
