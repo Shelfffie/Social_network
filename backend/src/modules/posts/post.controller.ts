@@ -85,9 +85,6 @@ export class PostController {
     query: PaginationFilterDto,
     @CurrentUser() user?: UserDocument,
   ) {
-    console.log('QUERY:', query);
-    console.log('ByUSER', query.byUser);
-
     const page = query.page ?? 1;
     const search = query.search ?? '';
     const byUser = query.byUser ?? '';

@@ -34,7 +34,17 @@ export async function loginActions(data: AuthFormInputs) {
         rawCookies.forEach((cookieStr) => {
           const [nameValue] = cookieStr.split(";");
           const [name, value] = nameValue.split("=");
-          cookieStore.set(name.trim(), value.trim(), { httpOnly: true });
+
+          const isRefreshToken = name.trim() === "refresh_token";
+
+          const maxAgeValue = isRefreshToken ? 7 * 24 * 60 * 60 : 15 * 60;
+
+          cookieStore.set(name.trim(), value.trim(), {
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: maxAgeValue,
+            path: "/",
+          });
         });
       }
       console.log(resData);

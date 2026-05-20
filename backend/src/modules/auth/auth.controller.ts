@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Res, Get, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  Req,
+  HttpException,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dtos/Register.dto';
 import { LoginDto } from './dtos/Login.dto';
 import type { Response, Request } from 'express';
 import { SecurityService } from './security.service';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -48,9 +58,14 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log('IN REQUEST');
+
     const oldRefreshToken = req.cookies['refresh_token'];
-    res.clearCookie('refresh_token');
+    console.log('OLD REFRESH TOKEN:', oldRefreshToken);
+    if (!oldRefreshToken) throw new HttpException('Session not found', 404);
+
     const tokens = await this.securityService.refresh(oldRefreshToken);
+    console.log('tokens:', tokens);
     this.securityService.setCookie(
       res,
       tokens.accessToken,

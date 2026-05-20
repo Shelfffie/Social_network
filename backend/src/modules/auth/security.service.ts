@@ -21,6 +21,8 @@ export class SecurityService {
 
   async refresh(refreshToken: string) {
     try {
+      console.log('REFRESHING!!');
+
       const payload = await this.jwtService.verifyAsync(refreshToken, {
         secret: this.configService.get<string>('JWT_REFRESH_TOKEN'),
       });

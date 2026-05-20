@@ -24,7 +24,6 @@ export class UserController {
 
   @Get('/me')
   me(@CurrentUser() user: UserDocument) {
-    console.log(user);
     return user;
   }
 
@@ -34,7 +33,6 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    console.log(id, user._id);
     if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
 
     const updatedUser = await this.usersService.updateUser(

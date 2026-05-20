@@ -15,6 +15,7 @@ import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
 import { loginActions, signupActions } from "../actions/auth-actions";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/auth-context";
+import Login from "./login-request";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
@@ -29,6 +30,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const [error, setError] = useState<string | undefined>("");
   const { setUser } = useAuth();
   const router = useRouter();
+  const { handleLogin } = Login();
 
   const isLogin = mode === "login";
 
@@ -48,7 +50,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         }
       : inputFieldsValue;
     const res = isLogin
-      ? await loginActions(payload as any)
+      ? await handleLogin(payload as any)
       : await signupActions(payload as any);
     setLoading(false);
     if (!res.success) {
