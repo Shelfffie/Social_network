@@ -6,7 +6,6 @@ import PostList from "../../posts/components/post-list";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import CreatePostComponent from "../../posts/components/create-post-component";
-import { useAuth } from "@/features/contexts/auth-context";
 
 export default function ProfileView({
   posts,

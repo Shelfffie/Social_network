@@ -38,7 +38,9 @@ export function AppSidebar({ user }: { user: UserType }) {
         </SidebarGroup>
         <SidebarMenu className="flex flex-col justify-end gap-5 pt-5">
           <SidebarMenuItem>
-            <ButtonGhostMenu text="Home" />
+            <Link href={"/"}>
+              <ButtonGhostMenu text="Home" />{" "}
+            </Link>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <ButtonGhostMenu text="Friends" />

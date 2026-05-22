@@ -1,7 +1,6 @@
 "use client";
 import ProfileView from "@/features/profile/components/profile-view";
 import usePostsData from "@/features/posts/hooks/use-post-data";
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 
