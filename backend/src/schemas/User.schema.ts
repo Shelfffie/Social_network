@@ -46,6 +46,7 @@ export class User {
     required: true,
     match: /^(?=.*[а-яa-zA-Z])(?=.*\d).{8,}$/,
     minlength: 8,
+    maxlength: 64,
     select: false,
   })
   password: string;
