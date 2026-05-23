@@ -45,7 +45,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setError("");
     const payload = isLogin
       ? {
-          loginIdentifier: inputFieldsValue.email || inputFieldsValue.username,
+          login: inputFieldsValue.email || inputFieldsValue.username,
           password: inputFieldsValue.password,
         }
       : inputFieldsValue;

@@ -49,15 +49,21 @@ export class AuthService {
   }
 
   async signIn(loginDto: LoginDto) {
-    const { username, email, password } = loginDto;
+    const { login, password } = loginDto;
     const filter: Record<string, string> = {};
-    if (!email && !username)
-      throw new HttpException('Email or username is required', 400);
+    if (!login) throw new HttpException('Email or username is required', 400);
 
-    if (username) {
-      filter.username = username;
-    } else if (email) {
-      filter.blindIndex = await this.securityService.generateBlindIndex(email);
+    const cleanLogin = login.trim().startsWith('@')
+      ? login.trim().slice(1)
+      : login.trim();
+
+    const isEmail = /^\S+@\S+\.\S+$/.test(cleanLogin);
+
+    if (isEmail) {
+      filter.blindIndex =
+        await this.securityService.generateBlindIndex(cleanLogin);
+    } else {
+      filter.username = cleanLogin;
     }
 
     const user: UserDocument | null = await this.usersService.findOne(filter);

@@ -6,13 +6,14 @@ export const SignUpSchema = z
 
     username: z
       .string()
+      .trim()
       .min(3, "Username must be at least 3 characher long")
       .toLowerCase()
       .transform((val) => val.replace(/^@/, "")),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
-      .max(30, "Password must not exceed 30 characters")
+      .max(64, "Password must not exceed 64 characters")
       .refine((password) => /[A-Z]/.test(password), {
         message: "Password must contain at least one uppercase letter",
       })
@@ -30,16 +31,10 @@ export const SignUpSchema = z
   });
 
 export const LoginSchema = z.object({
-  loginIdentifier: z
+  login: z
     .string()
+    .trim()
     .min(3, "Must be at least 3 characher long")
-    .toLowerCase()
-    .pipe(
-      z.union([
-        z.email("Email is required"),
-        z.string().min(3, "Username must be at least 3 characters long"),
-      ])
-    )
-    .transform((val) => val.toLowerCase()),
+    .transform((val) => val.toLowerCase().replace(/^@/, "")),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
