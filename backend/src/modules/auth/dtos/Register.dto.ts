@@ -17,21 +17,27 @@ export class RegisterDto {
   })
   @IsLowercase({ message: 'Username must be in lower case' })
   @MinLength(3, { message: 'Username must be 3 character at least' })
-  @MaxLength(30, { message: 'Username must not exceed 30 characters' })
+  @MaxLength(50, { message: 'Username  must be shorter than 50 characters' })
   username: string;
 
   @IsString({ message: 'Email must be string' })
   @IsEmail()
   @IsNotEmpty({ message: 'Email is required' })
-  @IsLowercase({ message: 'Username must be in lower case' })
   email: string;
 
   @IsOptional()
   @IsString({ message: 'Display name must be in lower case' })
+  @MinLength(2, {
+    message: 'Name must be at least 2 characters',
+  })
+  @MaxLength(50, {
+    message: 'Name must be shorter than 50 characters',
+  })
   displayName?: string;
 
   @IsString({ message: 'Password must be string' })
   @MinLength(8, { message: 'Password must be at least 8 character long' })
+  @MaxLength(64)
   @Matches(/^(?=.*[а-яa-zA-Z])(?=.*\d).{8,}$/, {
     message: 'Password must contain letters and numbers',
   })

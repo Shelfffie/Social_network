@@ -1,5 +1,6 @@
 import {
   IsEmail,
+  IsLowercase,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -16,11 +17,15 @@ export class UpdateUserDto {
   @IsString({
     message: 'Username must be a string',
   })
+  @IsLowercase({ message: 'Username must be in lower case' })
   @MinLength(2, {
     message: 'Username must be at least 2 characters',
   })
   @MaxLength(50, {
     message: 'Username must be shorter than 50 characters',
+  })
+  @Matches(/^\S+$/, {
+    message: 'Username must be a single word without spaces',
   })
   username?: string;
 
