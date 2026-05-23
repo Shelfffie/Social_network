@@ -20,6 +20,13 @@ export class User {
   displayName?: string;
 
   @Prop({
+    minLength: 0,
+    maxLength: 200,
+    default: '',
+  })
+  bio?: string;
+
+  @Prop({
     unique: true,
     required: true,
     select: false,
