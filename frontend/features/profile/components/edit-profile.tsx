@@ -10,6 +10,7 @@ import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EditInputValuesType } from "../utils/edit-types";
 import { SaveEditDataFunction } from "../actions/save-edit-data";
+import { getChangedFields } from "../utils/get-changes-fields";
 
 export default function EditProfileFormComponent() {
   const { user } = useAuth();
@@ -47,9 +48,16 @@ export default function EditProfileFormComponent() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    const changesValues = getChangedFields(inputValues, user);
+
+    if (Object.keys(changesValues).length === 0) {
+      console.log("No changes");
+      router.push("/profile");
+      return;
+    }
 
     try {
-      const result = await SaveEditDataFunction(inputValues);
+      const result = await SaveEditDataFunction(changesValues);
       if (result?.success) {
         console.log(result);
         router.push("/profile");
