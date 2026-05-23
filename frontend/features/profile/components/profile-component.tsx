@@ -25,6 +25,7 @@ export default function ProfileComponent({
         <div>
           <h2 className="text-xl">{user?.displayName ?? "Showed Name"}</h2>
           <p className="text-indigo-600">@{user?.username ?? "Username"}</p>
+          <p>{user?.bio ?? ""}</p>
         </div>
         <p>{user?.friends.length ?? "0"} friends</p>
         {isMyProfile ? (

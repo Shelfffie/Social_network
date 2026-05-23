@@ -1,5 +1,5 @@
 export interface EditInputValuesType {
-  icon: File | null;
+  icon?: File | null;
   displayName: string;
   username: string;
   bio: string;

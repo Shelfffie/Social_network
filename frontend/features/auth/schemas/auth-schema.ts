@@ -8,8 +8,8 @@ export const SignUpSchema = z
       .string()
       .trim()
       .min(3, "Username must be at least 3 characher long")
-      .toLowerCase()
-      .transform((val) => val.replace(/^@/, "")),
+      .max(50, "Username  must be shorter than 50 characters")
+      .transform((val) => val.toLowerCase().replace(/^@/, "")),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")

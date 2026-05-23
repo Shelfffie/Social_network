@@ -13,7 +13,6 @@ import { RegisterDto } from './dtos/Register.dto';
 import { LoginDto } from './dtos/Login.dto';
 import type { Response, Request } from 'express';
 import { SecurityService } from './security.service';
-import { AuthGuard } from 'src/common/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {

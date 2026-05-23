@@ -8,8 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EditInputValuesType } from "./utils/edit-types";
-import { SaveEditDataFunction } from "./actions/save-edit-data";
+import { EditInputValuesType } from "../utils/edit-types";
+import { SaveEditDataFunction } from "../actions/save-edit-data";
 
 export default function EditProfileFormComponent() {
   const { user } = useAuth();
@@ -19,8 +19,10 @@ export default function EditProfileFormComponent() {
     icon: null,
     displayName: user.displayName,
     username: user.username,
-    bio: "",
+    bio: user.bio,
   });
+
+  //ВИКОРИСТАТИ СТЕЙТИ НА МАБЙБУТНЄ
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

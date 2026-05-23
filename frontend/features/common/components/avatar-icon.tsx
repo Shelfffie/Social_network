@@ -24,8 +24,8 @@ export default function AvatarIcon({
 
   return (
     <Image
-      width={100}
-      height={100}
+      width={200}
+      height={200}
       src={imageSrc}
       alt="avatar"
       className="rounded-full h-auto w-full min-w-15 aspect-square object-cover object-center"

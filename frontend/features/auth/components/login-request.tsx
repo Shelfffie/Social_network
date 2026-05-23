@@ -1,6 +1,5 @@
 "use client";
 
-import z from "zod";
 import { AuthFormInputs } from "../actions/utils/types";
 import { LoginSchema } from "../schemas/auth-schema";
 import api from "@/lib/axios";
