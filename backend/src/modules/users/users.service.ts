@@ -20,20 +20,18 @@ export class UsersService {
     return await this.userModel.findById(id).exec();
   }
 
-  async updateUser(
-    id: string,
-    updateUserDto: UpdateUserDto,
-    user: UserDocument,
-  ) {
+  async updateUser(user: UserDocument, updateUserDto: UpdateUserDto) {
     const updatedUser = await this.userModel
-      .findOneAndUpdate({ _id: id }, updateUserDto, { returnDocument: 'after' })
+      .findOneAndUpdate({ _id: user._id }, updateUserDto, {
+        returnDocument: 'after',
+      })
       .exec();
     if (!updatedUser) throw new HttpException('User not found', 404);
     return updatedUser;
   }
 
-  async deleteUser(id: string, user: UserDocument) {
-    const deleted = await this.userModel.findByIdAndDelete(id).exec();
+  async deleteUser(user: UserDocument) {
+    const deleted = await this.userModel.findByIdAndDelete(user._id).exec();
     if (!deleted) throw new HttpException('User not found', 404);
     return deleted;
   }

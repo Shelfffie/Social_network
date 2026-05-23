@@ -27,33 +27,23 @@ export class UserController {
     return user;
   }
 
-  @Patch('/:id')
+  @Patch('')
   async updateUser(
     @CurrentUser() user: UserDocument,
-    @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
-
-    const updatedUser = await this.usersService.updateUser(
-      id,
-      updateUserDto,
-      user,
-    );
+    const updatedUser = await this.usersService.updateUser(user, updateUserDto);
     return updatedUser;
   }
 
-  @Delete('/:id')
+  @Delete('')
   deleteUser(
     @CurrentUser() user: UserDocument,
-    @Param('id') id: string,
     @Res({ passthrough: true }) res: Response,
   ) {
-    if (id !== user._id.toString()) throw new HttpException('Forbidden', 403);
+    const deleted = this.usersService.deleteUser(user);
 
-    const deleted = this.usersService.deleteUser(id, user);
-    if (id === user._id.toString())
-      res.clearCookie('access_token', { signed: true });
+    res.clearCookie('access_token', { signed: true });
     res.clearCookie('refresh_token', { signed: true });
     return deleted;
   }
