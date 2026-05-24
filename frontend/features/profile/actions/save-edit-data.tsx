@@ -1,7 +1,10 @@
+"use server";
+
 import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import { EditInputValuesType } from "../utils/edit-types";
 import api from "@/lib/axios";
 import { EditProfileSchema } from "../schemas/edit-profile-schema";
+import { revalidatePath } from "next/cache";
 
 export async function SaveEditDataFunction(data: EditInputValuesType) {
   const parsed = EditProfileSchema.safeParse(data);
@@ -20,10 +23,11 @@ export async function SaveEditDataFunction(data: EditInputValuesType) {
   if (icon) formData.append("icon", icon);
 
   try {
-    const response = await api.patch("/user", formData);
+    const response = await api.patch("/users/me", formData);
     if (response.status === 200) {
       console.log("UPDATED!!!");
-      return { success: true, message: "updated" };
+      revalidatePath("/profile", "layout");
+      return { success: true, message: "updated", data: response.data };
     }
   } catch (error) {
     return { success: false, error: catchErrorHandler(error) };

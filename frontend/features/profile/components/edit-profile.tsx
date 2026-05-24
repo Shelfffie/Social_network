@@ -13,7 +13,7 @@ import { SaveEditDataFunction } from "../actions/save-edit-data";
 import { getChangedFields } from "../utils/get-changes-fields";
 
 export default function EditProfileFormComponent() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [inputValues, setInputValues] = useState<EditInputValuesType>({
@@ -52,15 +52,17 @@ export default function EditProfileFormComponent() {
 
     if (Object.keys(changesValues).length === 0) {
       console.log("No changes");
-      router.push("/profile");
+      router.back();
       return;
     }
 
     try {
       const result = await SaveEditDataFunction(changesValues);
       if (result?.success) {
-        console.log(result);
-        router.push("/profile");
+        console.log(result.data);
+
+        setUser(result.data);
+        router.back();
       } else {
         setError(result?.message || "Щось пішло не так");
       }
