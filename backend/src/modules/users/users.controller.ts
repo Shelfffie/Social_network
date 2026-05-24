@@ -22,12 +22,12 @@ import type { Response } from 'express';
 export class UserController {
   constructor(private usersService: UsersService) {}
 
-  @Get('/me')
+  @Get('me')
   me(@CurrentUser() user: UserDocument) {
     return user;
   }
 
-  @Patch('')
+  @Patch('me')
   async updateUser(
     @CurrentUser() user: UserDocument,
     @Body() updateUserDto: UpdateUserDto,
@@ -36,7 +36,7 @@ export class UserController {
     return updatedUser;
   }
 
-  @Delete('')
+  @Delete('me')
   deleteUser(
     @CurrentUser() user: UserDocument,
     @Res({ passthrough: true }) res: Response,
@@ -56,7 +56,7 @@ export class UserController {
     return this.usersService.deleteFriend(friendId, user._id.toString());
   }
 
-  @Get('/:friends')
+  @Get('friends')
   getFriendsList(@CurrentUser() user) {
     return this.usersService.getFriendList(user._id.toString());
   }
