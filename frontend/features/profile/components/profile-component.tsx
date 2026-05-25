@@ -19,7 +19,7 @@ export default function ProfileComponent({
   return (
     <main className="flex flex-row items-center pt-5 h-80 w-full bg-indigo-50">
       <div className="ml-5">
-        <AvatarIcon sizes={"15"} />
+        <AvatarIcon sizes={"15"} img={user?.iconURL} />
       </div>
       <div className="flex flex-col flex-1 gap-10 w-70 p-10">
         <div>

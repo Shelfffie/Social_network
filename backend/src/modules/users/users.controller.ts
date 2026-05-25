@@ -8,6 +8,8 @@ import {
   Param,
   HttpException,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/common/guards/auth.guard';
@@ -16,6 +18,8 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pipe';
 import type { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from 'src/upload/multer.config';
 
 @UseGuards(AuthGuard)
 @Controller('users')
@@ -28,11 +32,17 @@ export class UserController {
   }
 
   @Patch('me')
+  @UseInterceptors(FileInterceptor('icon', multerConfig('user/avatars')))
   async updateUser(
     @CurrentUser() user: UserDocument,
     @Body() updateUserDto: UpdateUserDto,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    const updatedUser = await this.usersService.updateUser(user, updateUserDto);
+    const updatedUser = await this.usersService.updateUser(
+      user,
+      updateUserDto,
+      file,
+    );
     return updatedUser;
   }
 

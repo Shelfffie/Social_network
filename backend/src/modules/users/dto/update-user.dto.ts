@@ -66,7 +66,7 @@ export class UpdateUserDto {
   @MinLength(8, {
     message: 'Password must be at least 8 characters',
   })
-  @MinLength(64)
+  @MaxLength(64)
   @Matches(/^(?=.*[а-яa-zA-Z])(?=.*\d).{8,}$/)
   password?: string;
 

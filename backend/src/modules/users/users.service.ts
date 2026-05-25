@@ -20,9 +20,19 @@ export class UsersService {
     return await this.userModel.findById(id).exec();
   }
 
-  async updateUser(user: UserDocument, updateUserDto: UpdateUserDto) {
+  async updateUser(
+    user: UserDocument,
+    updateUserDto: UpdateUserDto,
+    file?: Express.Multer.File,
+  ) {
+    const dataToUpdate = { ...UpdateUserDto };
+
+    if (file) {
+      dataToUpdate['iconURL'] = `uploads/user/avatars/${file.filename}`;
+    }
+
     const updatedUser = await this.userModel
-      .findOneAndUpdate({ _id: user._id }, updateUserDto, {
+      .findOneAndUpdate({ _id: user._id }, dataToUpdate, {
         returnDocument: 'after',
       })
       .exec();

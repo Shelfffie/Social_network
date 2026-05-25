@@ -4,6 +4,6 @@ export interface UserType {
   bio: string;
   displayName: string;
   friends: string[];
-  iconUrl?: string | null;
+  iconURL?: string | null;
   createdAt: string;
 }
