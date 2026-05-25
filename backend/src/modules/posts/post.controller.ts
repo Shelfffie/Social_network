@@ -11,17 +11,20 @@ import {
   UseGuards,
   DefaultValuePipe,
   ParseIntPipe,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 
 import { PostService } from './post.service';
 import { CreatePostDto } from './dtos/create-post.dto';
-import mongoose from 'mongoose';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { PaginationFilterDto } from './dtos/pagination-filter.dto';
 import type { UserDocument } from 'src/utils/schema.types';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pipe';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { multerConfig } from 'src/upload/multer.config';
 
 @Controller('posts')
 export class PostController {
@@ -29,11 +32,13 @@ export class PostController {
 
   @UseGuards(AuthGuard)
   @Post('')
+  @UseInterceptors(FilesInterceptor('photos', 10, multerConfig('posts/photos')))
   async createPost(
     @Body() createPostDto: CreatePostDto,
+    @UploadedFiles() photos: Express.Multer.File[],
     @CurrentUser() user: UserDocument,
   ) {
-    return this.postService.createPost(createPostDto, user);
+    return this.postService.createPost(createPostDto, user, photos);
   }
 
   @UseGuards(AuthGuard)

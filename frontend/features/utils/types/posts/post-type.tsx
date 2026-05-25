@@ -1,7 +1,7 @@
 export type PostType = {
   _id: string;
   content?: string;
-  images?: string[];
+  imageURLs?: string[];
   commentsCount?: number;
   tags?: string[];
   likesCount: number;

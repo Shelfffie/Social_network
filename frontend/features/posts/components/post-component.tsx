@@ -2,6 +2,7 @@ import { MessageCircle } from "lucide-react";
 import AvatarIcon from "../../common/components/avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import LikeButtonToggle from "./like-button-toggle";
+import { getImageUrl } from "@/lib/utils";
 
 export default function PostComponent({
   post,
@@ -10,6 +11,12 @@ export default function PostComponent({
   post?: PostType;
   auth?: any | null; //temporary. DON'T FORGET TO CHANGE
 }) {
+  console.log("POST :", post);
+  if (!post) return null;
+
+  if (post?.imageURLs && post?.imageURLs.length > 0) {
+    console.log("IMAGE URL: ------", post?.imageURLs);
+  }
   return (
     <main className="flex flex-col gap-5 p-5 max-w-1000 border-b-1 h-auto min-h-30 border-indigo-300 pl-5">
       <div className="flex flex-row gap-5">
@@ -27,7 +34,11 @@ export default function PostComponent({
           "Текст (від лат. textus — «тканина», «з'єднання», «побудова») — це зв'язна та послідовна сукупність знаків, що утворює певне повідомлення, висловлювання або документ"}
       </div>
       <div className="grid grid-rows">
-        {post?.images && post?.images?.map((imgSrc) => <img src={imgSrc} />)}
+        {post?.imageURLs &&
+          post?.imageURLs.length > 0 &&
+          post?.imageURLs?.map((imgSrc) => (
+            <img src={`${getImageUrl(imgSrc)}`} />
+          ))}
       </div>
       <div className="flex flex-row justify-between pr-15 pl-15">
         <div className="flex flex-row gap-2">

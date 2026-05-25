@@ -11,10 +11,19 @@ import { Post } from 'src/schemas/Post.schema';
 export class PostService {
   constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
 
-  async createPost(createPostDto: CreatePostDto, user: UserDocument) {
+  async createPost(
+    createPostDto: CreatePostDto,
+    user: UserDocument,
+    photos?: Express.Multer.File[],
+  ) {
+    const imageURLs = photos
+      ? photos.map((file) => `uploads/posts/photos/${file.filename}`)
+      : [];
+
     const newPost = new this.postModel({
       ...createPostDto,
       creatorId: user._id,
+      imageURLs: imageURLs,
     });
     return await newPost.save();
   }

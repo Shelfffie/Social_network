@@ -12,7 +12,7 @@ export class Post {
   content: string;
 
   @Prop([String])
-  images?: string[];
+  imageURLs?: string[];
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true, index: true })
   creatorId: Types.ObjectId;

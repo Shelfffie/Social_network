@@ -20,7 +20,7 @@ export async function SaveEditDataFunction(data: EditInputValuesType) {
   if (displayName !== undefined) formData.append("displayName", displayName);
   if (username !== undefined) formData.append("username", username);
   if (bio !== undefined) formData.append("bio", bio);
-  if (icon) formData.append("icon", icon);
+  if (icon) formData.append("icon", icon.photo);
 
   try {
     const response = await api.patch("/users/me", formData);
