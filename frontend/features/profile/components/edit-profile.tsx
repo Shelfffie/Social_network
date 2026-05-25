@@ -1,5 +1,7 @@
 "use client";
 
+//ДОДАТИ ОБРОБНИК ПОМИЛОК І LOADINGА
+
 import AvatarIcon from "../../common/components/avatar-icon";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -8,70 +10,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EditInputValuesType } from "../utils/edit-types";
-import { SaveEditDataFunction } from "../actions/save-edit-data";
-import { getChangedFields } from "../utils/get-changes-fields";
+import useEditProfile from "../hooks/use-edit-profile";
 
 export default function EditProfileFormComponent() {
   const { user, setUser } = useAuth();
   const router = useRouter();
+  const { inputValues, isLoading, error, inputHandler, submit } =
+    useEditProfile(user, setUser);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [inputValues, setInputValues] = useState<EditInputValuesType>({
-    icon: null,
-    displayName: user.displayName,
-    username: user.username,
-    bio: user.bio,
-  });
-
-  //ВИКОРИСТАТИ СТЕЙТИ НА МАБЙБУТНЄ
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const inputHandler = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
-    if (type === "file") {
-      const fileInput = e.target as HTMLInputElement;
-      if (fileInput.files && fileInput.files[0]) {
-        setInputValues((prev) => ({ ...prev, [name]: fileInput.files![0] }));
-      }
-    } else {
-      setInputValues((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    const changesValues = getChangedFields(inputValues, user);
-
-    if (Object.keys(changesValues).length === 0) {
-      console.log("No changes");
-      router.back();
-      return;
-    }
-
-    try {
-      const result = await SaveEditDataFunction(changesValues);
-      if (result?.success) {
-        console.log(result.data);
-
-        setUser(result.data);
-        router.back();
-      } else {
-        setError(result?.message || "Щось пішло не так");
-      }
-    } catch (error) {
-      console.error(error);
-      setError("Connection error");
-    } finally {
-      setIsLoading(false);
-    }
+    const success = await submit(e); // submit повертає boolean
+    if (success) router.back();
   };
 
   return (

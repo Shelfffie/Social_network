@@ -28,7 +28,7 @@ export function AppSidebar({ user }: { user: UserType }) {
       </SidebarHeader>
       <SidebarContent className="bg-indigo-50">
         <SidebarGroup className="flex flex-row gap-5 p-5 border-b-1 border-indigo-300">
-          <AvatarIcon img={user?.iconUrl} />
+          <AvatarIcon img={user?.iconURL} />
           <div>
             <Button variant="link" className="text-xl p-0">
               <Link href={"/profile"}> Profile</Link>
