@@ -5,7 +5,6 @@ import { EditInputValuesType } from "../utils/edit-types";
 import { UserType } from "@/features/utils/types/user";
 import { getChangedFields } from "../utils/get-changes-fields";
 import { SaveEditDataFunction } from "../actions/save-edit-data";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function useEditProfile(
   user: UserType,

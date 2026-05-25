@@ -20,7 +20,7 @@ export default function EditProfileFormComponent() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    const success = await submit(e); // submit повертає boolean
+    const success = await submit(e);
     if (success) router.back();
   };
 
