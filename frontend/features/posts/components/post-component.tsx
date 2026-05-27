@@ -3,6 +3,7 @@ import AvatarIcon from "../../common/components/avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import LikeButtonToggle from "./like-button-toggle";
 import { getImageUrl } from "@/lib/utils";
+import ImagesComponent from "./images-components";
 
 export default function PostComponent({
   post,
@@ -29,16 +30,13 @@ export default function PostComponent({
         </div>
       </div>
 
-      <div className="pl-2">
-        {post?.content ??
-          "Текст (від лат. textus — «тканина», «з'єднання», «побудова») — це зв'язна та послідовна сукупність знаків, що утворює певне повідомлення, висловлювання або документ"}
-      </div>
-      <div className="grid grid-rows">
-        {post?.imageURLs &&
-          post?.imageURLs.length > 0 &&
-          post?.imageURLs?.map((imgSrc, index) => (
-            <img key={index} src={`${getImageUrl(imgSrc)}`} />
-          ))}
+      <div className="pl-2">{post?.content}</div>
+      <div>
+        {post?.imageURLs && post?.imageURLs.length > 0 && (
+          <ImagesComponent
+            photos={post.imageURLs.map((img) => getImageUrl(img))}
+          />
+        )}
       </div>
       <div className="flex flex-row justify-between pr-15 pl-15">
         <div className="flex flex-row gap-2">

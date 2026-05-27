@@ -70,7 +70,7 @@ export default function CreatePostComponent() {
       />
       {inputValue.photos && inputValue?.photos?.length > 0 && (
         <div className="m-auto w-full">
-          <ImagesComponent photos={inputValue.photos} />
+          <ImagesComponent photos={inputValue.photos} isCreating={true} />
         </div>
       )}
       <div className="flex flex-row justify-between w-180 ">
