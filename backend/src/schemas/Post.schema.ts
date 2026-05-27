@@ -8,7 +8,7 @@ function TagsValidator(val: string[]) {
 
 @Schema({ timestamps: true })
 export class Post {
-  @Prop({ required: true, trim: true, minlength: 3, maxlength: 10000 })
+  @Prop({ required: true, trim: true, minlength: 1, maxlength: 10000 })
   content: string;
 
   @Prop([String])
