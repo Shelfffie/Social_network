@@ -2,6 +2,7 @@ import { PostType } from "@/features/utils/types/posts/post-type";
 import PostsSkeleton from "./posts-skeleton";
 import PostComponent from "./post-component";
 import { useAuth } from "@/features/auth/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 interface PostListProps {
   posts: PostType[];
@@ -16,6 +17,7 @@ export default function PostList({
 }: PostListProps) {
   if (loading) return <PostsSkeleton />;
   const auth = useAuth();
+  const router = useRouter();
 
   if (!posts || posts.length === 0) {
     return (
@@ -29,7 +31,9 @@ export default function PostList({
   return (
     <div className="flex flex-col">
       {posts?.map((post) => (
-        <PostComponent key={post._id} post={post} auth={auth} />
+        <div onClick={() => router.push(`/post/${post._id}`)}>
+          <PostComponent key={post._id} post={post} auth={auth} />
+        </div>
       ))}
     </div>
   );

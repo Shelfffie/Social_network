@@ -1,3 +1,4 @@
+import { Modal } from "@/features/common/components/modal";
 import { getSinglePost } from "@/features/posts/actions/get-posts";
 import PostPageClientWrapper from "@/features/posts/components/single-post-wrapper";
 
@@ -10,11 +11,13 @@ export default async function PostPage({
   const post = await getSinglePost(postId);
 
   return (
-    <div className="w-full @container">
-      <PostPageClientWrapper post={post} />
-      <div className="flex justify-center">
-        <h1>COMMENTS IN DEVELOPMENT...</h1>
+    <Modal isPost={true}>
+      <div className="w-full @container">
+        <PostPageClientWrapper post={post} />
+        <div className="flex justify-center">
+          <h1>COMMENTS IN DEVELOPMENT...</h1>
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 }
