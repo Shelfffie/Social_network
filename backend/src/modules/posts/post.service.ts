@@ -51,7 +51,7 @@ export class PostService {
     return await { message: 'Deleted succesfully!' };
   }
 
-  async getPostById(id: string, user?: UserDocument) {
+  async getPostById(id: string, user: UserDocument) {
     const post = await this.postModel
       .findById(id)
       .populate('creatorId', 'username iconURL')

@@ -75,10 +75,11 @@ export class PostController {
     return this.postService.deletePost(id, user);
   }
 
+  @UseGuards(AuthGuard)
   @Get('/:id')
   async findById(
     @Param('id', IsValidMongooseIdPipe) id: string,
-    user?: UserDocument,
+    @CurrentUser() user: UserDocument,
   ) {
     return this.postService.getPostById(id, user);
   }
