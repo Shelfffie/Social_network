@@ -9,11 +9,11 @@ export interface FetchPostsProps {
   userId?: string;
 }
 
-export async function fetchPostData({
+export const fetchPostData = async ({
   page = 1,
   search = "",
   userId,
-}: FetchPostsProps) {
+}: FetchPostsProps) => {
   const cookieStore = await cookies();
   const allCookies = cookieStore.toString();
   //ПРИБРАТИ У МАЙБУТНЬОМУ
@@ -26,7 +26,7 @@ export async function fetchPostData({
       },
       params: { page, search, byUser: userId },
     });
-    if (response.status === 200 || response.status === 201) {
+    if (response.status === 200) {
       const posts = response.data;
       console.log(posts);
       return posts;
@@ -34,4 +34,24 @@ export async function fetchPostData({
   } catch (error) {
     catchErrorHandler(error);
   }
-}
+};
+
+export const getSinglePost = async (postId: string) => {
+  const cookieStore = await cookies();
+  const allCookies = cookieStore.toString();
+
+  try {
+    const response = await api.get(`/posts/${postId}`, {
+      headers: {
+        Cookie: allCookies,
+      },
+    });
+    if (response.status === 200) {
+      const post = response.data;
+      console.log(post);
+      return post;
+    }
+  } catch (error) {
+    catchErrorHandler(error);
+  }
+};
