@@ -3,6 +3,7 @@ import defaultPhoto from "../../../public/default-avatar.jpg";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
+import useImagePreview from "../hooks/use-image-preview";
 
 export default function AvatarIcon({
   img,
@@ -11,12 +12,7 @@ export default function AvatarIcon({
   img?: File | string | null;
   sizes?: string;
 }) {
-  let src: string | StaticImageData = defaultPhoto;
-  if (img instanceof File) {
-    src = URL.createObjectURL(img);
-  } else if (typeof img === "string" && img.length > 0) {
-    src = img.startsWith("http") ? img : getImageUrl(img);
-  }
+  const src = useImagePreview(img) ?? defaultPhoto;
 
   console.log("Спроба завантаження URL:", src);
   return (

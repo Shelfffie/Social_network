@@ -36,8 +36,8 @@ export default function PostComponent({
       <div className="grid grid-rows">
         {post?.imageURLs &&
           post?.imageURLs.length > 0 &&
-          post?.imageURLs?.map((imgSrc) => (
-            <img src={`${getImageUrl(imgSrc)}`} />
+          post?.imageURLs?.map((imgSrc, index) => (
+            <img key={index} src={`${getImageUrl(imgSrc)}`} />
           ))}
       </div>
       <div className="flex flex-row justify-between pr-15 pl-15">

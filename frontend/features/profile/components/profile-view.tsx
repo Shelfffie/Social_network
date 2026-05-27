@@ -59,7 +59,7 @@ export default function ProfileView({
         )}
       </nav>
       {isActive === "posts" && (
-        <div className="flex items-center justify-center h-40 pt-5 border-b-1 border-indigo-300">
+        <div className="flex items-center justify-center min-h-40 h-auto pt-5 border-b-1 border-indigo-300">
           <CreatePostComponent />
         </div>
       )}

@@ -1,7 +1,8 @@
-import { Image } from "lucide-react";
+import { Divide, Image } from "lucide-react";
 import { InputBasic } from "../../common/components/input";
 import React, { useRef, useState } from "react";
 import { createPostAction } from "../actions/create-post";
+import ImagesComponent from "./images-components";
 
 interface CreatePostValues {
   content: string;
@@ -45,6 +46,10 @@ export default function CreatePostComponent() {
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.type === "file" && e.target.files) {
       const filesArray = Array.from(e.target.files);
+      if (filesArray.length > 9) {
+        setError("Max file allowed is 9");
+        return;
+      }
       setInputValue((prev) => ({ ...prev, [e.target.name]: filesArray }));
     } else {
       setInputValue((prev) => ({ ...prev, content: e.target.value }));
@@ -53,7 +58,7 @@ export default function CreatePostComponent() {
 
   return (
     <form
-      className="flex flex-col w-full gap-5 justify-end w-200 items-center"
+      className="flex flex-col w-full gap-5 pb-10 justify-end items-center"
       onSubmit={(e) => handleSubmit(e)}
     >
       <InputBasic
@@ -63,6 +68,11 @@ export default function CreatePostComponent() {
         value={inputValue.content}
         name="content"
       />
+      {inputValue.photos && inputValue?.photos?.length > 0 && (
+        <div className="m-auto w-full">
+          <ImagesComponent photos={inputValue.photos} />
+        </div>
+      )}
       <div className="flex flex-row justify-between w-180 ">
         <Image
           className="text-indigo-600 active:scale-110 transition-all"
@@ -74,6 +84,7 @@ export default function CreatePostComponent() {
           ref={inputFileRef}
           onChange={(e) => inputHandler(e)}
           name="photos"
+          multiple
         />
         <button
           className="button-c bg-indigo-50 w-15 rounded-md hover::bg-indigo-100"
