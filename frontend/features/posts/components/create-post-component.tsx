@@ -58,7 +58,7 @@ export default function CreatePostComponent() {
 
   return (
     <form
-      className="flex flex-col w-full gap-5 pb-10 justify-end items-center"
+      className="flex flex-col w-full h-auto gap-5 pb-10 pt-13 justify-end items-center"
       onSubmit={(e) => handleSubmit(e)}
     >
       <InputBasic

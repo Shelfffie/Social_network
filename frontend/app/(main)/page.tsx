@@ -13,10 +13,10 @@ export default function Home() {
   const { user } = useAuth();
 
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full">
       <main className="flex-1 w-full">
-        <div className="flex flex-row w-full items-center h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
-          <div className="w-30 flex justify-center ">
+        <div className="flex flex-row w-full items-start min-h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
+          <div className="w-30 pl-1 pt-10 flex justify-center ">
             <AvatarIcon img={user?.iconURL} />
           </div>
           <CreatePostComponent />
