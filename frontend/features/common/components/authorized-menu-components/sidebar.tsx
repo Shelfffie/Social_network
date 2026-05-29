@@ -2,7 +2,7 @@ import { InputBasic } from "../input";
 import { Search } from "lucide-react";
 import AvatarIcon from "../avatar-icon";
 import { Button } from "@/components/ui/button";
-import ButtonGhostMenu from "../button";
+import ButtonGhostMenu from "../ghost-menu-button";
 import Link from "next/link";
 import {
   Sidebar,

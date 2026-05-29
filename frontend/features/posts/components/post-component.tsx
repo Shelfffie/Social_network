@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import AvatarIcon from "../../common/components/avatar-icon";
 import { PostType } from "@/features/utils/types/posts/post-type";
-import LikeButtonToggle from "./like-button-toggle";
+import LikeButtonToggle from "../../common/likes/like-button-toggle";
 import { getImageUrl } from "@/lib/utils";
 import ImagesComponent from "./images-components";
 
@@ -21,7 +21,7 @@ export default function PostComponent({
         <div className="">
           <h3>{post?.creatorId?.displayName ?? "Showed name"}</h3>
           <p className="text-indigo-600">
-            {post?.creatorId?.username ?? "username"}
+            @{post?.creatorId?.username ?? "username"}
           </p>
         </div>
       </div>
@@ -36,10 +36,13 @@ export default function PostComponent({
       </div>
       <div className="flex flex-row justify-between pr-15 pl-15">
         <div className="flex flex-row gap-2">
-          <MessageCircle className="text-indigo-600 active:scale-110 transition-all" />
+          <MessageCircle
+            size={18}
+            className="text-indigo-600 active:scale-110 transition-all"
+          />
           <p className="text-indigo-600">{post?.commentsCount ?? 0}</p>
         </div>
-        <LikeButtonToggle post={post} auth={auth} />
+        <LikeButtonToggle item={post} targetType="post" auth={auth} />
       </div>
     </main>
   );

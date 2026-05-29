@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import AvatarIcon from "../../common/components/avatar-icon";
 import { UserType } from "@/features/utils/types/user";
 import Link from "next/link";
+import WhiteButton from "@/features/common/components/white-indigo-button";
 
 export default function ProfileComponent({
   user,
@@ -30,14 +31,10 @@ export default function ProfileComponent({
         <p>{user?.friends.length ?? "0"} friends</p>
         {isMyProfile ? (
           <Link href={"/profile/edit"}>
-            <Button className="bg-white border-1 border-indigo-600 w-30 text-black hover:bg-indigo-300 transition-all">
-              Set up profile
-            </Button>
+            <WhiteButton text="Set up profile" />
           </Link>
         ) : (
-          <Button className="bg-white border-1 border-indigo-600 w-30 text-black hover:bg-indigo-300 transition-all">
-            Add Friend
-          </Button>
+          <WhiteButton text="Add Friend" />
         )}
       </div>
       <div className="h-full p-5">

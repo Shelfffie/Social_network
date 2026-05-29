@@ -38,6 +38,9 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
+    console.log('IN PATCH');
+    console.log('BODY:', updateUserDto);
+
     const updatedUser = await this.usersService.updateUser(
       user,
       updateUserDto,

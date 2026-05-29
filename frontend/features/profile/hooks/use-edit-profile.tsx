@@ -56,7 +56,7 @@ export default function useEditProfile(
         setUser(result.data);
         return true;
       } else {
-        setError(result?.message || "Щось пішло не так");
+        setError(result?.error || "Щось пішло не так");
         return false;
       }
     } catch (error) {

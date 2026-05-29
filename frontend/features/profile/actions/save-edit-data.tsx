@@ -9,6 +9,11 @@ import { revalidatePath } from "next/cache";
 export async function SaveEditDataFunction(data: EditInputValuesType) {
   const parsed = EditProfileSchema.safeParse(data);
 
+  console.log(
+    "PARSED DATA: ---------------------------------------------",
+    parsed
+  );
+
   if (!parsed.success)
     return {
       success: false,
@@ -20,7 +25,7 @@ export async function SaveEditDataFunction(data: EditInputValuesType) {
   if (displayName !== undefined) formData.append("displayName", displayName);
   if (username !== undefined) formData.append("username", username);
   if (bio !== undefined) formData.append("bio", bio);
-  if (icon) formData.append("icon", icon.photo);
+  if (icon) formData.append("icon", icon);
 
   try {
     const response = await api.patch("/users/me", formData);

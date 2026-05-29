@@ -31,7 +31,10 @@ export default function PostList({
   return (
     <div className="flex flex-col">
       {posts?.map((post) => (
-        <div onClick={() => router.push(`/post/${post._id}`)}>
+        <div
+          onClick={() => router.push(`/post/${post._id}`)}
+          className="cursor-pointer transition-all duration-300 hover:bg-indigo-50"
+        >
           <PostComponent key={post._id} post={post} auth={auth} />
         </div>
       ))}
