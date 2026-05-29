@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -21,12 +22,14 @@ import { IsValidMongooseIdPipe } from 'src/common/pipes/is-valid-mongoose-ts.pip
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
+  @UseGuards(AuthGuard)
   @Get('/post/:postId')
   async getCommentsByPost(
     @Param('postId', IsValidMongooseIdPipe) postId: string,
+    @CurrentUser() user: UserDocument,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    return this.commentsService.getComments(postId, page);
+    return this.commentsService.getComments(postId, page, user);
   }
 
   @UseGuards(AuthGuard)
@@ -50,5 +53,14 @@ export class CommentsController {
     @CurrentUser() user: UserDocument,
   ) {
     return await this.commentsService.deleteComment(commentId, user);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('/:commentId/like')
+  async likeUnlikeComment(
+    @Param('commentId', IsValidMongooseIdPipe) commentId: string,
+    @CurrentUser() user: UserDocument,
+  ) {
+    return this.commentsService.likeUnlike(commentId, user);
   }
 }

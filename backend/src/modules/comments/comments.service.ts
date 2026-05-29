@@ -18,7 +18,7 @@ export class CommentsService {
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
   ) {}
 
-  async getComments(postId: string, page: number) {
+  async getComments(postId: string, page: number, user: UserDocument) {
     const post = await this.postModel.findById(postId);
     if (!post) throw new HttpException("Post doesn't exist", 404);
 
@@ -30,9 +30,26 @@ export class CommentsService {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate({ path: 'creatorId', select: 'username' });
+      .populate({ path: 'creatorId', select: 'username displayName iconURL' });
 
-    return comments;
+    const mappedComments = comments.map((comment) => {
+      const commentObj = comment.toObject();
+
+      return {
+        ...commentObj,
+        likesCount: commentObj.likes?.length || 0,
+        isLiked: user
+          ? commentObj.likes?.some((id) => {
+              return id.toString() === user._id.toString();
+            })
+          : false,
+        likes: undefined,
+      };
+    });
+
+    console.log('MAPPED COMMENTS:', mappedComments);
+
+    return { comments: mappedComments };
   }
 
   async createComment(
@@ -40,6 +57,8 @@ export class CommentsService {
     createCommentDto: CreateCommentDto,
     user: UserDocument,
   ) {
+    console.log(createCommentDto);
+
     const post = await this.postModel.findById(postId);
     if (!post) throw new HttpException("Post doesn't exist", 404);
     const newComment = new this.commentModel({
@@ -65,5 +84,25 @@ export class CommentsService {
       $inc: { commentsCount: -1 },
     });
     return await this.commentModel.findByIdAndDelete(commentId);
+  }
+
+  async likeUnlike(id: string, user: UserDocument) {
+    const comment = await this.commentModel.findById(id);
+    if (!comment) throw new HttpException('comment not found', 404);
+
+    const isLiked = comment.likes.some(
+      (likeId) => likeId.toString() === user._id.toString(),
+    );
+
+    if (isLiked) {
+      comment.likes = comment.likes.filter(
+        (likeId) => likeId.toString() !== user._id.toString(),
+      );
+    } else {
+      comment.likes.push(user._id);
+    }
+
+    await comment.save();
+    return { isLiked: !isLiked };
   }
 }
