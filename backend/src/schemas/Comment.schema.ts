@@ -14,6 +14,9 @@ export class Comment {
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
   creatorId: Types.ObjectId;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  likes: Types.ObjectId[];
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);
