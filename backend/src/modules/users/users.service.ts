@@ -25,7 +25,8 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
     file?: Express.Multer.File,
   ) {
-    const dataToUpdate = { ...UpdateUserDto };
+    const dataToUpdate = { ...updateUserDto };
+    console.log(dataToUpdate);
 
     if (file) {
       dataToUpdate['iconURL'] = `uploads/user/avatars/${file.filename}`;
@@ -36,6 +37,8 @@ export class UsersService {
         returnDocument: 'after',
       })
       .exec();
+    console.log(updatedUser);
+
     if (!updatedUser) throw new HttpException('User not found', 404);
     return updatedUser;
   }
