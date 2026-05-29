@@ -11,11 +11,12 @@ import {
 import { InputBasic } from "@/features/common/components/input";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
-import { AuthFormInputs, AuthFormProps } from "../actions/utils/types";
-import { loginActions, signupActions } from "../actions/auth-actions";
+
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/auth-context";
 import Login from "./login-request";
+import { AuthFormInputs, AuthFormProps } from "../utils/types";
+import { signupActions } from "../actions/auth-actions";
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const [inputFieldsValue, setInputFieldsValue] = useState<AuthFormInputs>({
@@ -73,9 +74,9 @@ export default function AuthForm({ mode }: AuthFormProps) {
         <h1 className="text-2xl">{isLogin ? "Login" : "Sign up"}</h1>
         <div className="flex flex-col gap-5 w-10/12">
           <div>
-            <p className="ml-5">Email:</p>
+            <p className="ml-5">Email or Username:</p>
             <InputBasic
-              placeholder="Enter email"
+              placeholder="Enter login"
               name="email"
               value={inputFieldsValue.email}
               onChange={handleInput}
