@@ -9,12 +9,16 @@ export default function CommentsList({
 }) {
   const auth = useAuth();
   return (
-    <div>
-      {comments.map((comment) => (
-        <div key={comment._id}>
-          <Comment comment={comment} auth={auth} />
-        </div>
-      ))}
+    <div className="flex flex-col justify-center items-center">
+      {comments.length === 0 ? (
+        <p className="p-5">No comments yet</p>
+      ) : (
+        comments.map((comment) => (
+          <div key={comment._id} className="w-full">
+            <Comment comment={comment} auth={auth} />
+          </div>
+        ))
+      )}
     </div>
   );
 }

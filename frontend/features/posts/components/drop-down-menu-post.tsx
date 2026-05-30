@@ -12,10 +12,12 @@ import {
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import { Ellipsis } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PostDropDownDetails({ post }: { post: PostType }) {
   const { user } = useAuth();
+  const router = useRouter();
   const [isAuthour, setIsAuthour] = useState<boolean>(false);
 
   useEffect(() => {
@@ -42,7 +44,11 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
         {isAuthour ? (
           <>
             <DropdownMenuGroup>
-              <DropdownMenuItem>Редагувати пост</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push(`/post/${post._id}/edit`)}
+              >
+                Редагувати пост
+              </DropdownMenuItem>
               <DropdownMenuItem>Видалити пост</DropdownMenuItem>
             </DropdownMenuGroup>
           </>

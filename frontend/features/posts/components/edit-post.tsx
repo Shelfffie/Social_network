@@ -9,6 +9,7 @@ import { getImageUrl } from "@/lib/utils";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import { useRouter } from "next/navigation";
 import { FetchEditPost } from "../actions/edit-post";
+import { Button } from "@/components/ui/button";
 
 export default function EditPost({ post }: { post: PostType }) {
   const { user } = useAuth();
@@ -29,6 +30,7 @@ export default function EditPost({ post }: { post: PostType }) {
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (user && post.creatorId._id !== user._id.toString()) return;
     console.log("SUBMIT FIRED");
     e.preventDefault();
     setIsLoading(true);
@@ -56,7 +58,7 @@ export default function EditPost({ post }: { post: PostType }) {
 
   return (
     <form
-      className="flex flex-col items-center gap-5 w-full p-10"
+      className="flex flex-col items-center gap-5 w-full p-10 @container"
       onSubmit={(e) => handleSubmit(e)}
     >
       <div className="w-full">
@@ -71,7 +73,7 @@ export default function EditPost({ post }: { post: PostType }) {
       <Textarea
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        className="max-h-60"
+        className="max-h-60  @max-[500px]:bg-white"
       />
 
       <div>
@@ -82,12 +84,12 @@ export default function EditPost({ post }: { post: PostType }) {
         )}
       </div>
 
-      <button
-        className="button-c bg-indigo-50 w-25 h-10 rounded-md hover::bg-indigo-100"
+      <Button
+        className=" w-25 h-10 rounded-md text-black bg-indigo-50 hover:bg-indigo-100 transition-all  @max-[500px]:bg-white "
         type="submit"
       >
         Save
-      </button>
+      </Button>
     </form>
   );
 }
