@@ -2,6 +2,7 @@ import { getCommentsByPost } from "@/features/comments/actions/get-comments";
 import CommentsList from "@/features/comments/components/comments-list";
 import CreateCommentComponent from "@/features/comments/components/create-comment";
 import { getSinglePost } from "@/features/posts/actions/get-posts";
+
 import PostPageClientWrapper from "@/features/posts/components/single-post-wrapper";
 
 export default async function PostPage({

@@ -4,6 +4,7 @@ import { PostType } from "@/features/utils/types/posts/post-type";
 import LikeButtonToggle from "../../common/likes/like-button-toggle";
 import { getImageUrl } from "@/lib/utils";
 import ImagesComponent from "./images-components";
+import PostDropDownDetails from "./drop-down-menu-post";
 
 export default function PostComponent({
   post,
@@ -16,6 +17,9 @@ export default function PostComponent({
 
   return (
     <main className="flex flex-col gap-5 p-5 w-full border-b-1 h-auto min-h-30 border-indigo-300 pl-5 @min-[950px]:pt-10">
+      <div className="absolute w-20 right-0 ">
+        <PostDropDownDetails post={post} />
+      </div>
       <div className="flex flex-row gap-5">
         <AvatarIcon img={post?.creatorId?.iconURL} />
         <div className="">

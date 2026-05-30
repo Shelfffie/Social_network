@@ -56,7 +56,7 @@ export default function EditPost({ post }: { post: PostType }) {
 
   return (
     <form
-      className="flex flex-col items-center gap-5 w-full p-20"
+      className="flex flex-col items-center gap-5 w-full p-10"
       onSubmit={(e) => handleSubmit(e)}
     >
       <div className="w-full">
