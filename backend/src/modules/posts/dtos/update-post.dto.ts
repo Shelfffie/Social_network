@@ -15,11 +15,6 @@ export class UpdatePostDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  images?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
   @ArrayMaxSize(5, { message: 'You can add 5 tags only' })
   tags?: string[];
 }
