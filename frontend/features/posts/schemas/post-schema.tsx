@@ -8,8 +8,9 @@ interface TransformedContent {
   tags: string[];
 }
 
-export const PostSchema = z.object({
-  content: z.string().transform((val): TransformedContent => {
+export const PostContentSchema = z
+  .string()
+  .transform((val): TransformedContent => {
     const tags = val.match(HASHTAG_REGEX) || [];
     const contentWithoutTags = val.replace(HASHTAG_REGEX, "").trim();
 
@@ -17,7 +18,10 @@ export const PostSchema = z.object({
       content: contentWithoutTags,
       tags: tags,
     };
-  }),
+  });
+
+export const PostSchema = z.object({
+  content: PostContentSchema,
   photos: z.array(imageValidator).optional(),
 });
 
