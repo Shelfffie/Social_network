@@ -1,6 +1,6 @@
 import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import api from "@/lib/axios";
-import { PostSchema } from "../schemas/create-post-schema";
+import { PostSchema } from "../schemas/post-schema";
 import { CreatePostValues } from "../utils/types";
 
 export const createPostAction = async (data: CreatePostValues) => {
