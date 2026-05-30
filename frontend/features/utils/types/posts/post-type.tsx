@@ -1,13 +1,13 @@
 export type PostType = {
   _id: string;
-  content?: string;
+  content: string;
   imageURLs?: string[];
   commentsCount?: number;
   tags?: string[];
   likesCount: number;
   isLiked: boolean;
-  creatorId?: {
-    _id?: string;
+  creatorId: {
+    _id: string;
     displayName?: string;
     username?: string;
     iconURL?: string;
