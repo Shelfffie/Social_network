@@ -13,13 +13,11 @@ export const createComment = async (
       content,
       parentId,
     });
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       console.log("RESPONSE DATA:", response.data);
-      return response.data;
+      return { success: true, message: "commented", data: response.data };
     }
-    return [];
   } catch (error) {
-    catchErrorHandler(error);
-    return [];
+    return { success: false, error: catchErrorHandler(error) };
   }
 };

@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { InputBasic } from "@/features/common/components/input";
 import WhiteButton from "@/features/common/components/white-indigo-button";
 import React, { useState } from "react";
@@ -8,9 +7,11 @@ import { createComment } from "../actions/create-comments";
 export default function CreateCommentComponent({
   postId,
   parentId,
+  onCommentCreated,
 }: {
   postId: string;
   parentId?: string;
+  onCommentCreated?: (newComment: CommentType) => void;
 }) {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -23,7 +24,8 @@ export default function CreateCommentComponent({
     try {
       const result = await createComment(postId, inputValue, parentId);
       if (result?.success) {
-        console.log(result.data);
+        console.log("HEW COMMENT:", result.data);
+        if (onCommentCreated) onCommentCreated(result.data);
         return true;
       } else {
         setError(result?.message || "Щось пішло не так");

@@ -14,9 +14,19 @@ export function Modal({
 }) {
   const router = useRouter();
   const modalWindowRef = useRef<HTMLDivElement | null>(null);
+
+  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      router.back();
+    }
+  };
+
   return (
     <>
-      <div className="flex items-center justify-center fixed inset-0 z-[999] bg-black/50">
+      <div
+        className="flex items-center justify-center fixed inset-0 z-[999] bg-black/50"
+        onClick={handleBackgroundClick}
+      >
         <div
           className={`relative max-h-[93vh] max-w-3xl border-2 rounded-xl shadow-1 bg-indigo-50 overflow-y-auto @container ${
             isPost ? `w-full` : `min-w-90`

@@ -34,7 +34,9 @@ export default function PostsContainer({
         <div className="w-30 pl-1 pt-10 flex justify-center">
           <AvatarIcon img={user?.iconURL} />
         </div>
-        <CreatePostComponent onPostCreated={handleNewPost} />
+        {showCreateForm && (
+          <CreatePostComponent onPostCreated={handleNewPost} />
+        )}
       </div>
       <PostList posts={posts} loading={loading} />
     </main>

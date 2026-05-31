@@ -5,9 +5,6 @@ import { PostContentSchema } from "../schemas/post-schema";
 export const FetchEditPost = async (postId: string, content: string) => {
   const parsedContent = PostContentSchema.safeParse(content);
 
-  console.log("PARSED:", parsedContent.success);
-  console.log("PARSED INFO:", parsedContent);
-
   if (!parsedContent.success)
     return {
       success: false,
@@ -19,7 +16,6 @@ export const FetchEditPost = async (postId: string, content: string) => {
       tags: parsedContent.data.tags,
     });
     if (response.status === 200) {
-      console.log("EDIT SUCCESS!!!");
       return { success: true, message: "edited", data: response.data };
     }
   } catch (error) {

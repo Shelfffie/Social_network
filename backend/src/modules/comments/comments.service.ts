@@ -30,7 +30,7 @@ export class CommentsService {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate({ path: 'creatorId', select: 'username displayName iconURL' });
+      .populate('creatorId', 'username displayName iconURL');
 
     const mappedComments = comments.map((comment) => {
       const commentObj = comment.toObject();
@@ -72,7 +72,11 @@ export class CommentsService {
       $inc: { commentsCount: 1 },
     });
 
-    return await newComment.save();
+    const savedComment = await newComment.save();
+    return await savedComment.populate(
+      'creatorId',
+      'displayName username iconURL',
+    );
   }
 
   async deleteComment(commentId: string, user: UserDocument) {

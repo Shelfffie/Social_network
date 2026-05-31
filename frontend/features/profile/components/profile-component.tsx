@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import AvatarIcon from "../../common/components/avatar-icon";
 import { UserType } from "@/features/utils/types/user";
 import Link from "next/link";

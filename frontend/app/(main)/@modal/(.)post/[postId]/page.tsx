@@ -1,4 +1,5 @@
 import { getCommentsByPost } from "@/features/comments/actions/get-comments";
+import CommentsContainer from "@/features/comments/components/comments-container";
 import CommentsList from "@/features/comments/components/comments-list";
 import CreateCommentComponent from "@/features/comments/components/create-comment";
 import { Modal } from "@/features/common/components/modal";
@@ -18,15 +19,13 @@ export default async function PostPage({
     <Modal isPost={true}>
       <div className="w-full @container">
         <PostPageClientWrapper post={post} />
-        <div className="flex justify-center">
-          <div className="w-full">
-            <div className="p-2 bg-indigo-50 border-b-1 border-indigo-300">
-              <div className="m-auto w-11/12 pt-10">
-                <CreateCommentComponent postId={postId} />
-              </div>
-            </div>
-            <CommentsList comments={comments} />
-          </div>
+        <div className="flex flex-col w-full justify-center">
+          <CommentsContainer
+            initialComments={comments}
+            postId={postId}
+            createCommStyle="w-full m-auto p-5 border-b-1 bg-indigo-50 border-indigo-300"
+            commListStyle=""
+          />
         </div>
       </div>
     </Modal>
