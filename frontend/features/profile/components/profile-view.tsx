@@ -2,21 +2,21 @@
 
 import { PostType } from "@/features/utils/types/posts/post-type";
 import ProfileComponent from "./profile-component";
-import PostList from "../../posts/components/post-list";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import CreatePostComponent from "../../posts/components/create-post-component";
+import { UserType } from "@/features/utils/types/user";
+import PostsContainer from "@/features/posts/components/posts-container";
 
 export default function ProfileView({
   posts,
   loading,
   isMyProfile,
-  auth,
+  user,
 }: {
   posts: PostType[];
   loading: boolean;
   isMyProfile: boolean;
-  auth?: any; //temporary any
+  user: UserType;
 }) {
   const [isActive, setIsActive] = useState<string>("posts");
   const basicBtnStyles =
@@ -26,7 +26,7 @@ export default function ProfileView({
 
   return (
     <div className="flex flex-col w-full">
-      <ProfileComponent user={auth.user} isMyProfile={isMyProfile} />
+      <ProfileComponent user={user} isMyProfile={isMyProfile} />
       <nav className="flex flex-row justify-between items-center h-15 bg-indigo-50 pl-10 pr-10 border-t-1 border-b-1 border-indigo-300">
         <Button
           variant="ghost"
@@ -59,11 +59,13 @@ export default function ProfileView({
         )}
       </nav>
       {isActive === "posts" && (
-        <div className="flex items-center justify-center min-h-40 h-auto pt-5 border-b-1 border-indigo-300">
-          <CreatePostComponent />
-        </div>
+        <PostsContainer
+          initialPosts={posts}
+          user={user}
+          loading={loading}
+          showCreateForm={isMyProfile}
+        />
       )}
-      <PostList posts={posts} loading={loading} />
     </div>
   );
 }

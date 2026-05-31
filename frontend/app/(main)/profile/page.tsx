@@ -24,7 +24,7 @@ export default function ProfilePage() {
       posts={posts}
       loading={loading}
       isMyProfile={true}
-      auth={auth}
+      user={auth.user}
     />
   );
 }
