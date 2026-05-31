@@ -6,12 +6,11 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import { PostType } from "@/features/utils/types/posts/post-type";
-import { Ellipsis } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -22,6 +21,8 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
 
   useEffect(() => {
     console.log("POST CREATOR");
+    if (!user || !post.creatorId || !post.creatorId._id) return;
+
     if (post.creatorId._id.toString() === user._id.toString()) {
       setIsAuthour(true);
     } else {
@@ -33,7 +34,7 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost">
-          <Ellipsis />
+          <EllipsisVertical />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

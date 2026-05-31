@@ -14,6 +14,8 @@ export default async function PostPage({
   const post = await getSinglePost(postId);
   const comments: CommentType[] = await getCommentsByPost(postId, 1);
 
+  const handleNewComment = (newPost: CommentType) => {};
+
   return (
     <div className="flex flex-row w-full  @container">
       <PostPageClientWrapper post={post} />

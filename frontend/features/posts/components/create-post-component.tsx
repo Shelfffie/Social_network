@@ -3,13 +3,18 @@ import { InputBasic } from "../../common/components/input";
 import React, { useRef, useState } from "react";
 import { createPostAction } from "../actions/create-post";
 import ImagesComponent from "./images-components";
+import { PostType } from "@/features/utils/types/posts/post-type";
 
 interface CreatePostValues {
   content: string;
   photos: File[] | null;
 }
 
-export default function CreatePostComponent() {
+export default function CreatePostComponent({
+  onPostCreated,
+}: {
+  onPostCreated: (newPost: PostType) => void;
+}) {
   const [inputValue, setInputValue] = useState<CreatePostValues>({
     content: "",
     photos: [],
@@ -26,7 +31,9 @@ export default function CreatePostComponent() {
     try {
       const result = await createPostAction(inputValue);
       if (result?.success) {
-        console.log(result.data);
+        console.log("POST DATA:", result.data);
+        onPostCreated(result.data);
+        setInputValue((prev) => ({ ...prev, content: "", photos: [] }));
         return true;
       } else {
         setError(result?.message || "Щось пішло не так");

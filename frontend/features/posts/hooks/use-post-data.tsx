@@ -33,5 +33,5 @@ export default function usePostsData(query: FetchPostsProps) {
     getPosts();
   }, [query.page, query.search, query.userId]);
 
-  return { posts, loading, count };
+  return { posts, loading, count, setPosts };
 }

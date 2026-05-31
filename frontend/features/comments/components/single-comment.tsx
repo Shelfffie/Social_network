@@ -25,7 +25,7 @@ export default function Comment({
             <p className="text-indigo-600">@{comment.creatorId.username}</p>
           </div>
         </div>
-        <p>{comment.content}</p>
+        <p className="break-all">{comment.content}</p>
         <div className="flex flew-row justify-between pt-2">
           <MessageCircle
             size={18}

@@ -6,20 +6,25 @@ import CreatePostComponent from "@/features/posts/components/create-post-compone
 import PostList from "@/features/posts/components/post-list";
 import usePostsData from "@/features/posts/hooks/use-post-data";
 import { useAuth } from "@/features/auth/contexts/auth-context";
+import { PostType } from "@/features/utils/types/posts/post-type";
 
 export default function Home() {
   const query: FetchPostsProps = {};
-  const { posts, loading } = usePostsData(query);
+  const { posts, setPosts, loading } = usePostsData(query);
   const { user } = useAuth();
+
+  const handleNewPost = (newPost: PostType) => {
+    setPosts((prev) => [newPost, ...prev]);
+  };
 
   return (
     <div className="flex flex-col w-full">
       <main className="flex-1 w-full">
-        <div className="flex flex-row w-full items-start min-h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
+        <div className="flex flex-row items-start min-h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
           <div className="w-30 pl-1 pt-10 flex justify-center">
             <AvatarIcon img={user?.iconURL} />
           </div>
-          <CreatePostComponent />
+          <CreatePostComponent onPostCreated={handleNewPost} />
         </div>
         <PostList posts={posts} loading={loading} />
       </main>

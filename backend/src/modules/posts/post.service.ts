@@ -25,7 +25,11 @@ export class PostService {
       creatorId: user._id,
       imageURLs: imageURLs,
     });
-    return await newPost.save();
+    const savedPost = await newPost.save();
+    return await savedPost.populate(
+      'creatorId',
+      'displayName username iconURL',
+    );
   }
 
   async updatePost(

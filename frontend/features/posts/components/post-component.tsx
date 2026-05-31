@@ -30,7 +30,7 @@ export default function PostComponent({
         </div>
       </div>
 
-      <div className="pl-2">{post?.content}</div>
+      <div className="pl-2 break-all">{post?.content}</div>
       <div>
         {post?.imageURLs && post?.imageURLs.length > 0 && (
           <ImagesComponent

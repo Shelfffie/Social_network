@@ -40,8 +40,8 @@ export const createPostAction = async (data: CreatePostValues) => {
 
   try {
     const response = await api.post("/posts", formData);
-    if (response.status === 200) {
-      console.log("POSTed!!!");
+    if (response.status === 200 || response.status === 201) {
+      console.log("POSTed!!!:", response.data);
       return { success: true, message: "posted", data: response.data };
     }
   } catch (error) {
