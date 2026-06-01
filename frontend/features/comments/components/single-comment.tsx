@@ -5,6 +5,7 @@ import LikeButtonToggle from "@/features/common/likes/like-button-toggle";
 import { MessageCircle } from "lucide-react";
 import { useState } from "react";
 import CreateCommentComponent from "./create-comment";
+import { CommentType } from "../utils/types";
 
 export default function Comment({
   comment,

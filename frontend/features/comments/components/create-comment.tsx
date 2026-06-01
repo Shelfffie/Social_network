@@ -3,16 +3,16 @@ import { InputBasic } from "@/features/common/components/input";
 import WhiteButton from "@/features/common/components/white-indigo-button";
 import React, { useState } from "react";
 import { createComment } from "../actions/create-comments";
+import { useCommentAction } from "../contexts/comment-context";
 
 export default function CreateCommentComponent({
   postId,
   parentId,
-  onCommentCreated,
 }: {
   postId: string;
   parentId?: string;
-  onCommentCreated?: (newComment: CommentType) => void;
 }) {
+  const addComment = useCommentAction();
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -24,8 +24,10 @@ export default function CreateCommentComponent({
     try {
       const result = await createComment(postId, inputValue, parentId);
       if (result?.success) {
-        console.log("HEW COMMENT:", result.data);
-        if (onCommentCreated) onCommentCreated(result.data);
+        if (addComment) addComment(result.data);
+        setInputValue("");
+        console.log("NEW COMMENT:", result.data);
+
         return true;
       } else {
         setError(result?.message || "Щось пішло не так");
