@@ -47,8 +47,6 @@ export class CommentsService {
       };
     });
 
-    console.log('MAPPED COMMENTS:', mappedComments);
-
     return { comments: mappedComments };
   }
 

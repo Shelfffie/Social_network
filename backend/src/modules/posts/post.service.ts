@@ -52,7 +52,9 @@ export class PostService {
     if (!post) throw new HttpException('Post not found', 404);
     if (post.creatorId.toString() !== user._id.toString())
       throw new HttpException('Forbidden', 403);
-    return await { message: 'Deleted succesfully!' };
+
+    await this.postModel.findByIdAndDelete(id);
+    return { message: 'Deleted succesfully!' };
   }
 
   async getPostById(id: string, user: UserDocument) {
