@@ -1,28 +1,32 @@
 "use client";
 
 import AvatarIcon from "@/features/common/components/avatar-icon";
-import { PostType } from "@/features/utils/types/posts/post-type";
-import { UserType } from "@/features/utils/types/user";
-import { useEffect, useState } from "react";
+import {
+  FetchPostsProps,
+  PostType,
+} from "@/features/utils/types/posts/post-type";
 import CreatePostComponent from "./create-post-component";
 import PostList from "./post-list";
+import usePostsData from "../hooks/use-post-data";
+import { useAuth } from "@/features/auth/contexts/auth-context";
+import { useMemo } from "react";
 
 export default function PostsContainer({
-  initialPosts,
-  user,
-  loading,
   showCreateForm = true,
+  userId,
 }: {
-  initialPosts: PostType[];
-  user: UserType;
-  loading: boolean;
   showCreateForm?: boolean;
+  userId?: string | null;
 }) {
-  const [posts, setPosts] = useState<PostType[]>(initialPosts);
-
-  useEffect(() => {
-    setPosts(initialPosts);
-  }, [initialPosts]);
+  const query = useMemo(
+    () => ({
+      page: 1,
+      userId: userId || undefined,
+    }),
+    [userId]
+  );
+  const { posts, setPosts, loading, loadMore, hasMore } = usePostsData(query);
+  const { user } = useAuth();
 
   const handleNewPost = (newPost: PostType) => {
     setPosts((prev) => [newPost, ...prev]);
@@ -38,7 +42,12 @@ export default function PostsContainer({
           <CreatePostComponent onPostCreated={handleNewPost} />
         )}
       </div>
-      <PostList posts={posts} loading={loading} />
+      <PostList
+        posts={posts}
+        loading={loading}
+        loadMore={loadMore}
+        hasMore={hasMore}
+      />
     </main>
   );
 }

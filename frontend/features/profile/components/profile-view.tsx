@@ -59,12 +59,7 @@ export default function ProfileView({
         )}
       </nav>
       {isActive === "posts" && (
-        <PostsContainer
-          initialPosts={posts}
-          user={user}
-          loading={loading}
-          showCreateForm={isMyProfile}
-        />
+        <PostsContainer showCreateForm={isMyProfile} userId={user._id} />
       )}
     </div>
   );

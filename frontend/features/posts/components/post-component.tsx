@@ -16,7 +16,7 @@ export default function PostComponent({
   if (!post) return null;
 
   return (
-    <main className="flex flex-col gap-5 p-5 w-full border-b-1 h-auto min-h-30 border-indigo-300 pl-5 @min-[950px]:pt-10">
+    <main className="relative flex flex-col gap-5 p-5 w-full border-b-1 h-auto min-h-30 border-indigo-300 pl-5 @min-[950px]:pt-10">
       <div className="absolute w-20 right-0 ">
         <PostDropDownDetails post={post} />
       </div>

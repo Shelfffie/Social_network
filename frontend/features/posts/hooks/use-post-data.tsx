@@ -6,32 +6,39 @@ import {
 } from "@/features/posts/actions/get-posts";
 import { catchErrorHandler } from "@/features/utils/types/catch-error-handler";
 import { PostType } from "@/features/utils/types/posts/post-type";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function usePostsData(query: FetchPostsProps) {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [count, setCount] = useState<number>(0);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
+  const loadPosts = async (pageNumber: number, isNew = false) => {
     setLoading(true);
-    const getPosts = async () => {
-      try {
-        console.log("QUERY SEARCH:", query.search);
+    try {
+      const data = await fetchPostData({ ...query, page: pageNumber });
+      setPosts((prev) => (isNew ? data.posts : [...prev, ...data.posts]));
+      setHasMore(data.posts.length > 0);
+      setPage(pageNumber);
+    } catch (error) {
+      catchErrorHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const posts = await fetchPostData(query);
-        console.log(posts);
-        setPosts(posts.posts);
-        setCount(posts.count);
-      } catch (error: unknown) {
-        catchErrorHandler(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadMore = useCallback(async () => {
+    if (!loading && hasMore) {
+      await loadPosts(page + 1);
+    }
+  }, [loading, hasMore, page, loadPosts]);
 
-    getPosts();
-  }, [query.page, query.search, query.userId]);
+  useEffect(() => {
+    setPage(1);
+    loadPosts(1, true);
+  }, [query.search, query.userId]);
 
-  return { posts, loading, count, setPosts };
+  return { posts, loading, count, setPosts, loadMore, hasMore };
 }

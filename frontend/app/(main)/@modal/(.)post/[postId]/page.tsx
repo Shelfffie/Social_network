@@ -13,7 +13,6 @@ export default async function PostPage({
 }) {
   const postId = (await params).postId;
   const post = await getSinglePost(postId);
-  const comments: CommentType[] = await getCommentsByPost(postId, 1);
 
   return (
     <Modal isPost={true}>
@@ -21,7 +20,6 @@ export default async function PostPage({
         <PostPageClientWrapper post={post} />
         <div className="flex flex-col w-full justify-center">
           <CommentsContainer
-            initialComments={comments}
             postId={postId}
             createCommStyle="w-full m-auto p-5 border-b-1 bg-indigo-50 border-indigo-300"
             commListStyle=""

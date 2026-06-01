@@ -17,7 +17,7 @@ export type PostType = {
 export interface FetchPostsProps {
   page: number;
   search?: string;
-  userId?: string;
+  userId?: string | null | undefined;
 }
 
 //zod .

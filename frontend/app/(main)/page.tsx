@@ -10,17 +10,9 @@ import { PostType } from "@/features/utils/types/posts/post-type";
 import PostsContainer from "@/features/posts/components/posts-container";
 
 export default function Home() {
-  const query: FetchPostsProps = {};
-  const { posts, setPosts, loading } = usePostsData(query);
-  const { user } = useAuth();
-
-  const handleNewPost = (newPost: PostType) => {
-    setPosts((prev) => [newPost, ...prev]);
-  };
-
   return (
     <div className="flex flex-col w-full">
-      <PostsContainer initialPosts={posts} user={user} loading={loading} />
+      <PostsContainer />
     </div>
   );
 }

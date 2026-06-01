@@ -14,21 +14,14 @@ export const fetchPostData = async ({
   search = "",
   userId,
 }: FetchPostsProps) => {
-  const cookieStore = await cookies();
-  const allCookies = cookieStore.toString();
-  //ПРИБРАТИ У МАЙБУТНЬОМУ
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  console.log("Fetching with params:", page, search, userId);
 
   try {
     const response = await api.get("/posts", {
-      headers: {
-        Cookie: allCookies,
-      },
       params: { page, search, byUser: userId },
     });
     if (response.status === 200) {
       const posts = response.data;
-      console.log(posts);
       return posts;
     }
   } catch (error) {
@@ -48,7 +41,6 @@ export const getSinglePost = async (postId: string) => {
     });
     if (response.status === 200) {
       const post = response.data;
-      console.log(post);
       return post;
     }
   } catch (error) {
