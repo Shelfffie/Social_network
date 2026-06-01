@@ -3,41 +3,50 @@ import PostsSkeleton from "./posts-skeleton";
 import PostComponent from "./post-component";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import useIntersectionObserver from "@/features/common/hooks/use-intersiction-observer";
 
 interface PostListProps {
   posts: PostType[];
   loading: boolean;
   emptyMessage?: string;
+  loadMore: () => void;
+  hasMore: boolean;
 }
 
 export default function PostList({
   posts,
   loading,
   emptyMessage = "That's all for now",
+  loadMore,
+  hasMore,
 }: PostListProps) {
-  if (loading) return <PostsSkeleton />;
   const auth = useAuth();
   const router = useRouter();
+  const { targetRef, isVisible } = useIntersectionObserver({
+    threshold: 0.1,
+  });
 
-  if (!posts || posts.length === 0) {
-    return (
-      <div className="flex justify-center items-center w-full h-15 text-indigo-600 ">
-        <h3>{emptyMessage}</h3>
-      </div>
-    );
-  }
-  console.log(posts);
+  useEffect(() => {
+    if (isVisible && hasMore && !loading) {
+      loadMore();
+    }
+  }, [isVisible, hasMore, loading, loadMore]);
 
   return (
     <div className="flex flex-col">
       {posts?.map((post) => (
         <div
+          key={post._id}
           onClick={() => router.push(`/post/${post._id}`)}
           className="cursor-pointer transition-all duration-300 hover:bg-indigo-50"
         >
           <PostComponent key={post._id} post={post} auth={auth} />
         </div>
       ))}
+      <div ref={targetRef} className="h-10">
+        {(hasMore || loading) && <PostsSkeleton />}
+      </div>
     </div>
   );
 }

@@ -31,7 +31,7 @@ export default function ScrollToTopButton({
   return (
     isVisible && (
       <Button
-        className="fixed z-2000 bottom-10 right-75 rounded-full text-black bg-indigo-50 w-10 h-10 hover:bg-indigo-300 transition-all"
+        className="fixed z-2000 bottom-10 right-60 rounded-full text-black bg-indigo-50 w-10 h-10 hover:bg-indigo-300 transition-all"
         onClick={() => {
           scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
         }}
