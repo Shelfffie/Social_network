@@ -72,6 +72,8 @@ export class PostController {
     @Param('id', IsValidMongooseIdPipe) id: string,
     @CurrentUser() user: UserDocument,
   ) {
+    console.log('IN DELETE POST CONTROLLER');
+
     return this.postService.deletePost(id, user);
   }
 
