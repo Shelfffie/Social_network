@@ -2,7 +2,7 @@ import { getCommentsByPost } from "@/features/comments/actions/get-comments";
 import CommentsContainer from "@/features/comments/components/comments-container";
 import CommentsList from "@/features/comments/components/comments-list";
 import CreateCommentComponent from "@/features/comments/components/create-comment";
-import { Modal } from "@/features/common/components/modal";
+import { Modal } from "@/features/common/components/modal-and-alert/modal";
 import { getSinglePost } from "@/features/posts/actions/get-posts";
 import PostPageClientWrapper from "@/features/posts/components/single-post-wrapper";
 
