@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 
 import React, { useEffect, useRef } from "react";
-import ScrollToTopButton from "./scroll-to-top-button";
+import ScrollToTopButton from "../scroll-to-top-button";
 import { useRouter } from "next/navigation";
 
 export function Modal({

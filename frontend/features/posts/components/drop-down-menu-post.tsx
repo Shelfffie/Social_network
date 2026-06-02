@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/features/auth/contexts/auth-context";
-import { Modal } from "@/features/common/components/modal";
+import { Modal } from "@/features/common/components/modal-and-alert/modal";
 import WhiteButton from "@/features/common/components/white-indigo-button";
 import { PostType } from "@/features/utils/types/posts/post-type";
 import { EllipsisVertical } from "lucide-react";
@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FetchDeletePost } from "../actions/delete-post";
 import { usePosts } from "../context/post-context";
+import Alert from "@/features/common/components/modal-and-alert/alert";
 
 export default function PostDropDownDetails({ post }: { post: PostType }) {
   const { user } = useAuth();
@@ -40,13 +41,15 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
     try {
       const result = await FetchDeletePost(postId);
       if (result?.success) {
-        removePost(postId);
+        setIsModalOpen(false);
+        setTimeout(() => {
+          removePost(postId);
+        }, 100);
       } else {
         console.log(result?.message);
       }
     } catch (error) {
       console.log("error");
-    } finally {
       setIsModalOpen(false);
     }
   };
@@ -86,27 +89,18 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
         </DropdownMenuContent>
       </DropdownMenu>
       {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <div className="flex flex-col items-center justify-center gap-7 h-50 w-full overflow-hidden">
-            <h1 className="text-lg">
-              Are you sure you want to delete this post?
-            </h1>
-            <p>This action cannot be undone</p>
-            <div className="flex flex-row gap-10">
-              <WhiteButton
-                text="Cancel"
-                onClick={() => setIsModalOpen(false)}
-              />
-              <Button
-                variant="destructive"
-                onClick={() => handleDeletePost(post._id)}
-                className="w-30"
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        </Modal>
+        <div onClick={(e) => e.stopPropagation()}>
+          <Alert
+            setModalState={() => setIsModalOpen(false)}
+            onConfirm={() => handleDeletePost(post._id)}
+            modalText={{
+              title: "Are you sure you want to delete this post?",
+              content: "This action cannot be undone",
+              cancelButton: "Cancel",
+              confirmButton: "Delete",
+            }}
+          />
+        </div>
       )}
     </>
   );
