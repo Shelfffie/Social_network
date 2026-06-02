@@ -1,9 +1,9 @@
 "use client";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import React, { useEffect, useRef } from "react";
 import ScrollToTopButton from "./scroll-to-top-button";
+import { useRouter } from "next/navigation";
 
 export function Modal({
   children,
@@ -12,10 +12,10 @@ export function Modal({
 }: {
   children: React.ReactNode;
   isPost?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
-  const router = useRouter();
   const modalWindowRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -24,10 +24,18 @@ export function Modal({
     };
   }, []);
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      router.back();
+    }
+  };
+
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
   };
 
@@ -46,7 +54,7 @@ export function Modal({
         >
           <button
             className="absolute z-1000 top-4 right-4 hover:text-indigo-600 active:scale-110 transition-all"
-            onClick={() => onClose()}
+            onClick={() => handleClose()}
           >
             <X />
           </button>

@@ -10,6 +10,7 @@ import PostList from "./post-list";
 import usePostsData from "../hooks/use-post-data";
 import { useAuth } from "@/features/auth/contexts/auth-context";
 import { useMemo } from "react";
+import { PostsProvider } from "../context/post-context";
 
 export default function PostsContainer({
   showCreateForm = true,
@@ -25,29 +26,19 @@ export default function PostsContainer({
     }),
     [userId]
   );
-  const { posts, setPosts, loading, loadMore, hasMore } = usePostsData(query);
   const { user } = useAuth();
 
-  const handleNewPost = (newPost: PostType) => {
-    setPosts((prev) => [newPost, ...prev]);
-  };
-
   return (
-    <main className="flex-1 w-full">
-      <div className="flex flex-row items-start min-h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
-        <div className="w-30 pl-1 pt-10 flex justify-center">
-          <AvatarIcon img={user?.iconURL} />
+    <PostsProvider query={query}>
+      <main className="flex-1 w-full">
+        <div className="flex flex-row items-start min-h-40 pt-5 pr-5 border-b-1 border-b-indigo-600">
+          <div className="w-30 pl-1 pt-10 flex justify-center">
+            <AvatarIcon img={user?.iconURL} />
+          </div>
+          {showCreateForm && <CreatePostComponent />}
         </div>
-        {showCreateForm && (
-          <CreatePostComponent onPostCreated={handleNewPost} />
-        )}
-      </div>
-      <PostList
-        posts={posts}
-        loading={loading}
-        loadMore={loadMore}
-        hasMore={hasMore}
-      />
-    </main>
+        <PostList />
+      </main>
+    </PostsProvider>
   );
 }

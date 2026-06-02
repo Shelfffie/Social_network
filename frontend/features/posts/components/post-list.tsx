@@ -5,22 +5,14 @@ import { useAuth } from "@/features/auth/contexts/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import useIntersectionObserver from "@/features/common/hooks/use-intersiction-observer";
-
-interface PostListProps {
-  posts: PostType[];
-  loading: boolean;
-  emptyMessage?: string;
-  loadMore: () => void;
-  hasMore: boolean;
-}
+import { usePosts } from "../context/post-context";
 
 export default function PostList({
-  posts,
-  loading,
   emptyMessage = "That's all for now",
-  loadMore,
-  hasMore,
-}: PostListProps) {
+}: {
+  emptyMessage?: string;
+}) {
+  const { posts, loading, loadMore, hasMore } = usePosts();
   const auth = useAuth();
   const router = useRouter();
   const { targetRef, isVisible } = useIntersectionObserver({

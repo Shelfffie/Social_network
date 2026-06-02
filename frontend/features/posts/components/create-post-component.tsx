@@ -4,17 +4,15 @@ import React, { useRef, useState } from "react";
 import { createPostAction } from "../actions/create-post";
 import ImagesComponent from "./images-components";
 import { PostType } from "@/features/utils/types/posts/post-type";
+import { usePosts } from "../context/post-context";
 
 interface CreatePostValues {
   content: string;
   photos: File[] | null;
 }
 
-export default function CreatePostComponent({
-  onPostCreated,
-}: {
-  onPostCreated: (newPost: PostType) => void;
-}) {
+export default function CreatePostComponent() {
+  const { addPost } = usePosts();
   const [inputValue, setInputValue] = useState<CreatePostValues>({
     content: "",
     photos: [],
@@ -32,7 +30,7 @@ export default function CreatePostComponent({
       const result = await createPostAction(inputValue);
       if (result?.success) {
         console.log("POST DATA:", result.data);
-        onPostCreated(result.data);
+        addPost(result.data);
         setInputValue((prev) => ({ ...prev, content: "", photos: [] }));
         return true;
       } else {

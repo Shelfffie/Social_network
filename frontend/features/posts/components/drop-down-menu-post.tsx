@@ -16,9 +16,11 @@ import { EllipsisVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FetchDeletePost } from "../actions/delete-post";
+import { usePosts } from "../context/post-context";
 
 export default function PostDropDownDetails({ post }: { post: PostType }) {
   const { user } = useAuth();
+  const { removePost } = usePosts();
   const router = useRouter();
   const [isAuthour, setIsAuthour] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -38,13 +40,12 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
     try {
       const result = await FetchDeletePost(postId);
       if (result?.success) {
-        return true;
+        removePost(postId);
       } else {
         console.log(result?.message);
-        return false;
       }
     } catch (error) {
-      return false;
+      console.log("error");
     } finally {
       setIsModalOpen(false);
     }

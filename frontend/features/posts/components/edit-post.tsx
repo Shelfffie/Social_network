@@ -10,13 +10,15 @@ import { useAuth } from "@/features/auth/contexts/auth-context";
 import { useRouter } from "next/navigation";
 import { FetchEditPost } from "../actions/edit-post";
 import { Button } from "@/components/ui/button";
+import { usePosts } from "../context/post-context";
 
 export default function EditPost({ post }: { post: PostType }) {
+  const { updatePost } = usePosts();
   const { user } = useAuth();
   const router = useRouter();
-
-  console.log("creatorId:", post.creatorId);
-  console.log("userId:", user._id);
+  const [inputValue, setInputValue] = useState<string>(post.content);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user && post.creatorId._id !== user._id.toString()) {
@@ -24,14 +26,9 @@ export default function EditPost({ post }: { post: PostType }) {
     }
   }, [post.creatorId, user, router]);
 
-  const [inputValue, setInputValue] = useState<string>(post.content);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (user && post.creatorId._id !== user._id.toString()) return;
-    console.log("SUBMIT FIRED");
     e.preventDefault();
     setIsLoading(true);
 
@@ -40,12 +37,10 @@ export default function EditPost({ post }: { post: PostType }) {
       if (result?.success) {
         console.log(result.data);
         router.replace(`/post/${post._id}`);
-        return true;
+        updatePost(result.data);
       } else {
         setError(result?.message || "Щось пішло не так");
         console.log(result?.message);
-
-        return false;
       }
     } catch (error) {
       console.error(error);
