@@ -5,19 +5,11 @@ import useIntersectionObserver from "@/features/common/hooks/use-intersiction-ob
 import { useEffect } from "react";
 import { buildCommentTree } from "../utils/build-comments-tree";
 import { CommentType, CommentWithReplies } from "../utils/types";
+import { useComments } from "../contexts/comment-context";
 
-export default function CommentsList({
-  comments,
-  loadMore,
-  hasMore,
-  loading,
-}: {
-  comments: CommentType[];
-  loadMore: () => void;
-  hasMore: boolean;
-  loading: boolean;
-}) {
+export default function CommentsList() {
   const auth = useAuth();
+  const { comments, loading, loadMore, hasMore } = useComments();
   const { targetRef, isVisible } = useIntersectionObserver({ threshold: 0.1 });
 
   const commentTree = buildCommentTree(comments);

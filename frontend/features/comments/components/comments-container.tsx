@@ -15,31 +15,13 @@ export default function CommentsContainer({
   createCommStyle: string;
   commListStyle: string;
 }) {
-  const { comments, setComments, loadMore, loading, hasMore } =
-    useCommentsData(postId);
-
-  const handleNewComment = (newComment: CommentType) => {
-    console.log("COMMENT NEW HANDLE");
-
-    setComments((prev) => {
-      const next = [newComment, ...prev];
-      console.log("Новий стан масиву коментарів:", next);
-      return next;
-    });
-  };
-
   return (
-    <CommentProvider value={handleNewComment}>
+    <CommentProvider postId={postId}>
       <div className={createCommStyle}>
         <CreateCommentComponent postId={postId} />
       </div>
       <div className={commListStyle}>
-        <CommentsList
-          comments={comments}
-          loadMore={loadMore}
-          hasMore={hasMore}
-          loading={loading}
-        />
+        <CommentsList />
       </div>
     </CommentProvider>
   );

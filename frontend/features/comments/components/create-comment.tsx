@@ -3,7 +3,7 @@ import { InputBasic } from "@/features/common/components/input";
 import WhiteButton from "@/features/common/components/white-indigo-button";
 import React, { useState } from "react";
 import { createComment } from "../actions/create-comments";
-import { useCommentAction } from "../contexts/comment-context";
+import { useComments } from "../contexts/comment-context";
 
 export default function CreateCommentComponent({
   postId,
@@ -12,7 +12,7 @@ export default function CreateCommentComponent({
   postId: string;
   parentId?: string;
 }) {
-  const addComment = useCommentAction();
+  const { addComment } = useComments();
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
