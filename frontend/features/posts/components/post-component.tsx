@@ -17,8 +17,8 @@ export default function PostComponent({
 
   return (
     <main className="relative flex flex-col gap-5 p-5 w-full border-b-1 h-auto min-h-30 border-indigo-300 pl-5 @min-[950px]:pt-10">
-      <div className="absolute w-20 right-0 ">
-        <PostDropDownDetails post={post} />
+      <div className="absolute w-15 right-0 ">
+        <PostDropDownDetails post={post} user={auth.user} />
       </div>
       <div className="flex flex-row gap-5">
         <AvatarIcon img={post?.creatorId?.iconURL} />

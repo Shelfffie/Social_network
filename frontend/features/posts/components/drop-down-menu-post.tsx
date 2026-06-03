@@ -18,26 +18,32 @@ import { useEffect, useState } from "react";
 import { FetchDeletePost } from "../actions/delete-post";
 import { usePosts } from "../context/post-context";
 import Alert from "@/features/common/components/modal-and-alert/alert";
+import { UserType } from "@/features/utils/types/user";
 
-export default function PostDropDownDetails({ post }: { post: PostType }) {
-  const { user } = useAuth();
+export default function PostDropDownDetails({
+  post,
+  user,
+}: {
+  post: PostType;
+  user: UserType;
+}) {
   const { removePost } = usePosts();
   const router = useRouter();
-  const [isAuthour, setIsAuthour] = useState<boolean>(false);
+  const [isAuthor, setIsAuthor] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("POST CREATOR");
     if (!user || !post.creatorId || !post.creatorId._id) return;
 
     if (post.creatorId._id.toString() === user._id.toString()) {
-      setIsAuthour(true);
+      setIsAuthor(true);
     } else {
-      setIsAuthour(false);
+      setIsAuthor(false);
     }
   }, [user, post]);
 
   const handleDeletePost = async (postId: string) => {
+    if (!isAuthor) return;
     try {
       const result = await FetchDeletePost(postId);
       if (result?.success) {
@@ -67,7 +73,7 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
           align="start"
           onClick={(e) => e.stopPropagation()}
         >
-          {isAuthour ? (
+          {isAuthor ? (
             <>
               <DropdownMenuGroup>
                 <DropdownMenuItem
@@ -91,7 +97,7 @@ export default function PostDropDownDetails({ post }: { post: PostType }) {
       {isModalOpen && (
         <div onClick={(e) => e.stopPropagation()}>
           <Alert
-            setModalState={() => setIsModalOpen(false)}
+            onClose={() => setIsModalOpen(false)}
             onConfirm={() => handleDeletePost(post._id)}
             modalText={{
               title: "Are you sure you want to delete this post?",
