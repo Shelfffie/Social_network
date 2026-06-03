@@ -21,6 +21,10 @@ export default function CreateCommentComponent({
     e.preventDefault();
     setIsLoading(true);
 
+    if (!inputValue.trim()) {
+      return;
+    }
+
     try {
       const result = await createComment(postId, inputValue, parentId);
       if (result?.success) {
