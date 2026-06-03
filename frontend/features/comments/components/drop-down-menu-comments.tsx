@@ -8,14 +8,57 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { useState } from "react";
-import { Modal } from "@/features/common/components/modal-and-alert/modal";
-import WhiteButton from "@/features/common/components/white-indigo-button";
+import { useEffect, useState } from "react";
 
-export default function CommentDropDownMenu() {
-  const router = useRouter();
-  const [isAuthour, setIsAuthour] = useState<boolean>(false);
+import Alert from "@/features/common/components/modal-and-alert/alert";
+import { FetchDeleteComment } from "../actions/delete-comment";
+import { useComments } from "../contexts/comment-context";
+
+import { CommentType } from "../utils/types";
+import { useAuth } from "@/features/auth/contexts/auth-context";
+import { UserType } from "@/features/utils/types/user";
+
+export default function CommentDropDownMenu({
+  comment,
+  user,
+  onEdit,
+}: {
+  comment: CommentType;
+  user: UserType;
+  onEdit: () => void;
+}) {
+  const [isAuthor, setIsAuthor] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { removeComment } = useComments();
+
+  useEffect(() => {
+    if (!user || !comment.creatorId || !comment.creatorId._id) return;
+
+    if (comment.creatorId._id.toString() === user._id.toString()) {
+      setIsAuthor(true);
+    } else {
+      setIsAuthor(false);
+    }
+  }, [user, comment]);
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (!isAuthor) return;
+    try {
+      const result = await FetchDeleteComment(commentId);
+      if (result?.success) {
+        setIsModalOpen(false);
+        setTimeout(() => {
+          removeComment(commentId);
+        }, 100);
+      } else {
+        console.log(result?.message);
+      }
+    } catch (error) {
+      console.log("error");
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -29,10 +72,12 @@ export default function CommentDropDownMenu() {
           align="start"
           onClick={(e) => e.stopPropagation()}
         >
-          {isAuthour ? (
+          {isAuthor ? (
             <>
               <DropdownMenuGroup>
-                <DropdownMenuItem>Редагувати коментар</DropdownMenuItem>
+                <DropdownMenuItem onClick={onEdit}>
+                  Редагувати коментар
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setIsModalOpen(true)}>
                   Видалити коментар
                 </DropdownMenuItem>
@@ -47,23 +92,20 @@ export default function CommentDropDownMenu() {
         </DropdownMenuContent>
       </DropdownMenu>
       {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <div className="flex flex-col items-center justify-center gap-7 h-50 w-full overflow-hidden">
-            <h1 className="text-lg">
-              Are you sure you want to delete this comment?
-            </h1>
-            <p>This action cannot be undone</p>
-            <div className="flex flex-row gap-10">
-              <WhiteButton
-                text="Cancel"
-                onClick={() => setIsModalOpen(false)}
-              />
-              <Button variant="destructive" onClick={() => {}} className="w-30">
-                Delete
-              </Button>
-            </div>
-          </div>
-        </Modal>
+        <div onClick={(e) => e.stopPropagation()}>
+          <Alert
+            onClose={() => setIsModalOpen(false)}
+            onConfirm={() => {
+              handleDeleteComment(comment._id);
+            }}
+            modalText={{
+              title: "Are you sure you want to delete this comment?",
+              content: "This action cannot be undone",
+              cancelButton: "Cancel",
+              confirmButton: "Delete",
+            }}
+          />
+        </div>
       )}
     </>
   );
